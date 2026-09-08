@@ -19,6 +19,10 @@
         <p>Browse today's picks from quick bites between classes to a proper sit-down meal.</p>
       </div>
 
+      <div class="site-shell menu-search">
+        <input id="menu-search" type="search" placeholder="Search dishes, e.g. jollof, chapman…" aria-label="Search menu">
+      </div>
+
       <div class="site-shell menu-filters" aria-label="Menu categories">
         <button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">All</button>
         <button class="filter-chip" type="button" data-filter="starters" aria-pressed="false">Starters</button>
@@ -28,90 +32,19 @@
       </div>
     </section>
 
-    <section class="site-shell menu-grid">
-      <article class="menu-card" data-category="starters">
-        <div class="menu-card-media">
-          <img src="../assets/menu/spring-rolls.jpg" alt="Crispy vegetable spring rolls">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Veggie Spring Rolls</h3>
-            <span class="price">₦1,200</span>
-          </div>
-          <p>Crispy rolls filled with cabbage, carrot and glass noodles, served with sweet chilli dip.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
+    <section class="menu-section site-shell">
+      <div class="menu-grid" id="catalogue-grid"></div>
+      <p class="menu-status" id="catalogue-status" hidden></p>
+    </section>
 
-      <article class="menu-card" data-category="mains">
-        <div class="menu-card-media">
-          <img src="../assets/menu/jollof-chicken.jpg" alt="Jollof rice with grilled chicken">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Jollof & Grilled Chicken</h3>
-            <span class="price">₦3,500</span>
-          </div>
-          <p>Smoky party-style jollof rice with a quarter grilled chicken and fried plantain.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
-
-      <article class="menu-card" data-category="mains">
-        <div class="menu-card-media">
-          <img src="../assets/menu/fried-rice.jpg" alt="Fried rice with beef">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Fried Rice & Beef</h3>
-            <span class="price">₦3,200</span>
-          </div>
-          <p>Classic Nigerian fried rice loaded with vegetables, served with peppered beef.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
-
-      <article class="menu-card" data-category="drinks">
-        <div class="menu-card-media">
-          <img src="../assets/menu/chapman.jpg" alt="Glass of chapman drink">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Chapman</h3>
-            <span class="price">₦900</span>
-          </div>
-          <p>A refreshing mix of soft drinks, grenadine and fresh fruit, served chilled.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
-
-      <article class="menu-card" data-category="drinks">
-        <div class="menu-card-media">
-          <img src="../assets/menu/zobo.jpg" alt="Glass of zobo drink">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Zobo</h3>
-            <span class="price">₦700</span>
-          </div>
-          <p>Hibiscus drink infused with ginger, pineapple and a hint of mint.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
-
-      <article class="menu-card" data-category="desserts">
-        <div class="menu-card-media">
-          <img src="../assets/menu/puff-puff.jpg" alt="Plate of puff puff">
-        </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <h3>Puff Puff (6 pcs)</h3>
-            <span class="price">₦800</span>
-          </div>
-          <p>Soft, golden fried dough balls, lightly sweetened a campus favourite.</p>
-          <button class="btn-add" type="button">Add to Cart</button>
-        </div>
-      </article>
+    <section class="menu-section live-section site-shell">
+      <div class="live-heading">
+        <p class="eyebrow">Live Kitchen</p>
+        <h2>Fresh from the international kitchen</h2>
+        <p>Pulled live from TheMealDB — international dishes available today.</p>
+      </div>
+      <p class="menu-status" id="live-status" hidden>Loading today's international picks…</p>
+      <div class="menu-grid" id="live-grid"></div>
     </section>
   </main>
   <script src="../js/storage.js"></script>
