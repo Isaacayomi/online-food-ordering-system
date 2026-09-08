@@ -1,8 +1,8 @@
 # Deployment & Pre-Launch Checklist (Vercel)
 
 This doc captures the steps to ship a public test build once every stream is
-merged. **Deploying is explicitly deferred** until the teammates (cart, contact,
-checkout/orders) have completed and merged their pages.
+merged. **Deploying is explicitly deferred** until the remaining streams (cart,
+contact, checkout/orders, home) have completed and merged their pages.
 
 ---
 
@@ -17,8 +17,8 @@ Suggested merge order (each via its own PR):
 | --- | --- | --- | --- |
 | 1 | `feat/live-menu-auth` | Menu + live TheMealDB feed/search, auth, cart model, header/badge, real photos | Base integration — merge first |
 | 2 | `feature/menu-page` | Earlier menu work | Conflicts expected in `js/menu.js`, `js/data.js`, `pages/menu.html`, `css/pages/menu.css` |
-| 3 | `feature/contact-page` | Contact form (thessy) | Conflicts in `pages/contact.html`, `css/pages/contact.css`, maybe `js/components.js` |
-| 4 | cart / checkout / orders / about (as they're finished) | nathanael, Fatai, etc. | Duplicate ownership of `pages/cart.html`, `pages/checkout.html`, `pages/orders.html`, `pages/about.html` |
+| 3 | `feature/contact-page` | Contact form | Conflicts in `pages/contact.html`, `css/pages/contact.css`, maybe `js/components.js` |
+| 4 | cart / checkout / orders / about (as they're finished) | — | Duplicate ownership of `pages/cart.html`, `pages/checkout.html`, `pages/orders.html`, `pages/about.html` |
 
 ### Known merge conflict areas
 - `js/data.js`, `js/menu.js`, `pages/menu.html`, `css/pages/menu.css`

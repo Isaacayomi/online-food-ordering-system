@@ -11,13 +11,14 @@ Shared shapes and event names so every stream (menu, cart, checkout, auth) build
   category: "starters | mains | drinks | desserts",
   price: 3500,                 // Number, Naira, whole naira. ALWAYS present on every item.
   description: "…",
-  image: "assets/menu/x.jpg" | "https://www.themealdb.com/…",  // relative OR absolute
-  live: false                  // optional; true for TheMealDB items
+  image: "https://…",          // absolute URL (TheMealDB CDN, Unsplash, Wikimedia Commons)
+  live: false                  // optional; true + searched:true for live search results
 }
 ```
 
 - **Never show an un-priced dish.** Catalogue prices live in the `PRICE_TABLET` in `data.js`; live items get a price from the tablet the moment they load.
-- Get an image's final URL via `Menu.url(item)` (handles the `../` prefix for pages under `/pages/`).
+- Images are always stored as absolute URLs. Get a card's final URL via `Menu.url(item)`; if an image fails to load, `menu.js` swaps it to `Menu.PLACEHOLDER` (a neutral inline SVG) — a card never shows a broken/empty image.
+- Local dish photos are real food images (Wikimedia Commons / Unsplash); the old gradient placeholder JPGs are removed from the repo.
 
 ## Storage keys (via `Storage` in `js/storage.js`)
 
@@ -29,6 +30,7 @@ Shared shapes and event names so every stream (menu, cart, checkout, auth) build
 | `foodOrders` | array of orders | checkout/orders |
 | `foodMessages` | array of contact messages | contact |
 | `foodMenu` | sessionStorage cache `{savedAt, live:[…]}` | menu |
+| `foodSearch-<query>` | sessionStorage cache of live search results (per query) | menu |
 
 Use `Storage.get(key, fallback)` / `Storage.set(key, value)` — never touch `localStorage` directly.
 
@@ -48,12 +50,20 @@ Use `Storage.get(key, fallback)` / `Storage.set(key, value)` — never touch `lo
 window.dispatchEvent(new CustomEvent("cartchange", { detail: { count, subtotal } }));
 ```
 
-- RGB badge: header hook is `#cart-badge` (span). Listen to `cartchange` + on load to update it; hide when 0.
+- Cart badge: header hook is `#cart-badge` (span). Listen to `cartchange` + on load to update it; hide when 0.
+
+## Menu API layer (`js/data.js`)
+
+- `Menu.CATALOG` — the 18-dish local Nigerian catalogue (source of truth for names/prices).
+- `Menu.PRICE_TABLET` — per-category price fallback; auto-priced at load/augment.
+- `Menu.loadLive()` — fetches TheMealDB Chicken/Seafood/Dessert (3 each), caches in `foodMenu`, resolves offline-safe.
+- `Menu.search(query)` — TheMealDB `search.php?s=` for up to 6 results with auto-curated prices, results flagged `searched: true`, cached per query (`foodSearch-<query>`); `[]` on no hit/error.
+- `Menu.url(item)` — final image URL; `Menu.PLACEHOLDER` — neutral SVG for broken images.
 
 ## Forms
 
 - All validation happens in JS; forms keep `novalidate`.
-- Error/success messaging uses `Utils` (`isEmail`, `isEmpty`) and nsota status `<p class="form-status" hidden>` + per-field `.field-error` text.
+- Error/success messaging uses `Utils` (`isEmail`, `isEmpty`) and a status `<p class="form-status" hidden>` + per-field `.field-error` text.
 
 ## Money
 

@@ -4,28 +4,25 @@ Thanks for helping with the Group 8 project. This guide describes how we collabo
 
 ## Branch model
 
-Three levels of branches:
-
 ```
-main            Production. Protected - never commit here.
-  └── dev       Integration. Protected - merged code lives here while features accumulate.
-        ├── feature/<name>     New pages or features
-        ├── fix/<name>         Bug fixes
-        └── docs/<name>        Documentation and reports
+main                        Production. Protected - updated only through approved PRs.
+  ├── feature/<name>        New pages or features
+  ├── fix/<name>            Bug fixes
+  └── docs/<name>           Documentation and reports
 ```
 
 **Rules:**
 
-- Never commit directly to `main` or `dev`.
-- Always create a branch off the latest `dev`, make your changes there, and open a pull request into `dev`.
-- Only `main` is ever pushed to by the project lead, via a pull request from `dev`.
+- Never commit directly to `main`.
+- Always create a branch off the latest `main`, make your changes there, and open a pull request into `main`.
+- The project lead reviews every pull request; nothing is merged without an approving review.
 
 ## Getting started
 
 ```sh
 git clone <repo-url>
-git checkout dev
-git pull origin dev
+git checkout main
+git pull origin main
 git checkout -b feature/<your-feature>
 ```
 
@@ -37,7 +34,7 @@ git commit -m "feat: add menu category filter"
 git push -u origin feature/<your-feature>
 ```
 
-Then open a pull request on GitHub **into `dev`** (never `main`).
+Then open a pull request on GitHub **into `main`**.
 
 ## Branch naming
 
@@ -68,16 +65,16 @@ Both should be specific and short. Reference an issue number when one exists, e.
 
 ## Pull request process
 
-1. Before opening a PR, pull the latest `dev` and rebase your branch onto it so there are no conflicts:
+1. Before opening a PR, pull the latest `main` and rebase your branch onto it so there are no conflicts:
 
    ```sh
    git fetch origin
-   git rebase origin/dev
+   git rebase origin/main
    ```
 
-2. Open the PR **into `dev`**. Fill in the pull request template with what changed, how it was tested, and any screenshots.
-3. The project lead reviews the PR. Address any review comments in follow-up commits on the same branch.
-4. When approved, the lead merges it into `dev`.
+2. Open the PR **into `main`**. Fill in the pull request template with what changed, how it was tested, and any screenshots.
+3. The lead reviews the PR. Address any review comments in follow-up commits on the same branch.
+4. When approved, the lead merges it into `main`.
 5. Do not merge your own PR.
 
 ## CSS ownership
@@ -98,8 +95,8 @@ Prefer existing component classes (`.btn`, `.card`, `.form-group`) from `compone
 
 ## Review policy
 
-- Every PR into `dev` requires at least one approving review.
-- `main` is protected so it can only be updated through an approved PR from `dev`.
+- Every PR into `main` requires at least one approving review.
+- `main` is protected so it can only be updated through an approved PR.
 - Reviewers should check: code runs locally, no console errors, markup is accessible, and the change matches the project's existing style.
 
 ## Before you request a review
