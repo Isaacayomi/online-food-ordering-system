@@ -217,9 +217,9 @@ At a glance:
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide. In short:
 
-- `main` - production branch, protected; every change lands via a pull request.
-- `feature/*`, `fix/*`, `docs/*` - branches for individual streams, opened as pull requests into `main`.
-- The project lead reviews and approves every pull request; no direct pushes to `main`.
+- `main` - production branch, protected; it only changes through an approved PR from `dev`.
+- `dev` - integration branch holding all merged stream work; teammates branch off it (`feature/<name>`) and open pull requests into it.
+- The project lead reviews every pull request; no direct pushes to `main` (and teammates don't merge their own PRs).
 
 ## Documentation
 

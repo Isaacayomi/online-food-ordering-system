@@ -8,8 +8,9 @@ contact, checkout/orders, home) have completed and merged their pages.
 
 ## 1. Merge everything to `main` first
 
-`origin/main` is the protected trunk. All feature work lives on branches and must
-land via pull requests. **Do not deploy before `main` is the full app.**
+`origin/main` is the protected trunk. Stream work lands in `dev` first (each via
+its own PR, see `CONTRIBUTING.md`); `main` is only updated from `dev` once
+everything is merged. **Do not deploy before `main` is the full app.**
 
 Suggested merge order (each via its own PR):
 
