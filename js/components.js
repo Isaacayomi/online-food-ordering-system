@@ -50,11 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const toggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".nav-links");
+  const header = document.querySelector(".site-header");
   toggle?.addEventListener("click", () => {
     const open = nav.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", String(open));
     toggle.textContent = open ? "✕" : "☰";
     document.body.classList.toggle("no-scroll", open);
+    header?.classList.toggle("is-menu-open", open);
   });
   nav?.addEventListener("click", (event) => {
     if (event.target.closest("a")) {
@@ -62,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toggle.setAttribute("aria-expanded", "false");
       toggle.textContent = "☰";
       document.body.classList.remove("no-scroll");
+      header?.classList.remove("is-menu-open");
     }
   });
 });

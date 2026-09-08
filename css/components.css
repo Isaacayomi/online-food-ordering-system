@@ -37,13 +37,14 @@
   .brand span { font-size: 27px; }
   .nav-toggle { display: block; margin-left: auto; }
   .table-button { display: none; }
-  .nav-links {
-    position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 24px;
-    background: var(--charcoal); transform: translateY(-100%); transition: transform .25s ease;
-  }
-  .nav-links.is-open { transform: translateY(0); }
-  .nav-links a { padding: 14px 20px; color: #fff; font-size: 22px; }
-  .nav-links a:hover, .nav-links .is-active { background: var(--accent); color: #fff; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0 48px; }
+  .nav-links.is-open { display: flex; }
+  .site-header.is-menu-open { display: flex; position: fixed; inset: 0; overflow-y: auto; flex-direction: column; background: rgba(249, 249, 247, 0.85); border-bottom: 0; }
+  .site-header.is-menu-open .primary-nav { flex: 1; min-height: 0; width: 100%; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px 24px 48px; }
+  .site-header.is-menu-open .nav-toggle { position: absolute; top: 22px; right: 8px; }
+  .site-header.is-menu-open .brand { display: none; }
+  .nav-links a { padding: 14px 20px; color: var(--ink); font-size: 22px; }
+  .nav-links a:hover, .nav-links .is-active { background: var(--sage); color: var(--ink); }
   .site-footer { margin-top: 32px; padding-top: 40px; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
   .footer-bottom { padding: 20px 0 24px; font-size: 14px; }
