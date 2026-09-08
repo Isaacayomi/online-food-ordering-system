@@ -39,7 +39,7 @@ const footerHTML = `
       </section>
       <section class="footer-links"><h2>Pages</h2><a href="${isPage ? "../index.html" : "index.html"}">Home</a><a href="${pageLink("about.html")}">About</a><a href="${pageLink("menu.html")}">Menu</a><a href="${pageLink("contact.html")}">Contact</a><a href="${pageLink("cart.html")}">Cart</a></section>
       <section class="footer-links"><h2>Utility Pages</h2><a href="${pageLink("login.html")}">Log In</a><a href="${pageLink("register.html")}">Create Account</a><a href="${pageLink("orders.html")}">My Orders</a></section>
-      <section class="footer-links"><h2>Contact</h2><a href="tel:+2348000000000">+234 800 000 0000</a><a href="mailto:hello@campuseats.com">hello@campuseats.com</a><span>23 University Road, Campus</span><span>Mon - Sat: 8:00am - 9:00pm</span></section>
+      <section class="footer-links"><h2>Contact</h2><span>Obafemi Awolowo University</span><span>Mon - Sat: 8:00am - 9:00pm</span></section>
     </div>
     <div class="site-shell footer-bottom">Copyright © 2026 CampusEats. All Rights Reserved.</div>
   </footer>`;
