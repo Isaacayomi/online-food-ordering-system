@@ -9,7 +9,13 @@
   <link rel="stylesheet" href="../css/pages/cart.css">
 </head>
 <body>
-  <main id="main"></main>
+  <main id="main" class="cart-page">
+    <section class="cart-hero"><p class="eyebrow">Your order</p><h1>Your Cart</h1><p>Review your selections before heading to checkout.</p></section>
+    <section class="cart-layout" aria-live="polite">
+      <div class="cart-panel"><div class="cart-panel-heading"><h2>Your items <span id="cart-item-count">(2)</span></h2><button class="cart-text-button" type="button" id="clear-cart">Clear cart</button></div><div id="cart-items"><article class="cart-item" data-price="3500"><div class="cart-item-art one">CE</div><div><h3>Classic Chicken Burger</h3><p>Grilled chicken, fresh greens &amp; house sauce</p><strong>₦3,500</strong></div><div class="cart-actions"><button class="remove-item" type="button" aria-label="Remove item">×</button><div class="quantity-control"><button class="quantity-button" data-step="-1" type="button">−</button><span class="quantity">1</span><button class="quantity-button" data-step="1" type="button">+</button></div></div></article><article class="cart-item" data-price="2800"><div class="cart-item-art two">CE</div><div><h3>Jollof Rice Bowl</h3><p>Smoky jollof rice, plantain &amp; grilled protein</p><strong>₦2,800</strong></div><div class="cart-actions"><button class="remove-item" type="button" aria-label="Remove item">×</button><div class="quantity-control"><button class="quantity-button" data-step="-1" type="button">−</button><span class="quantity">1</span><button class="quantity-button" data-step="1" type="button">+</button></div></div></article></div><div class="empty-cart" id="empty-cart" hidden><p>Your cart is empty.</p><a href="menu.html">Browse the menu</a></div><a class="continue-link" href="menu.html">← Continue shopping</a></div>
+      <aside class="order-summary"><h2>Order summary</h2><dl><div><dt>Subtotal</dt><dd id="subtotal">₦6,300</dd></div><div><dt>Delivery</dt><dd id="delivery">₦500</dd></div><div class="summary-total"><dt>Total</dt><dd id="total">₦6,800</dd></div></dl><a class="checkout-button" id="checkout-button" href="checkout.html">Proceed to checkout</a><p>Delivery fees and estimated time are confirmed at checkout.</p></aside>
+    </section>
+  </main>
   <script src="../js/storage.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/data.js"></script>
