@@ -2,10 +2,12 @@
 
 Run through these before the defence demo and record results in the table. Also verify the app on 2+ browsers (e.g. Chrome, Firefox) and a phone-sized window.
 
+> Status: the **cart page, checkout, My Orders, contact validation and home page** depend on open streams (see `docs/TASKS.md`). Their checklist items below are for the full build; the rest is testable now.
+
 ## Setup
 
-- [ ] `git clone` works, `node server.js` (or `python3 -m http.server 8000`) serves the site
-- [ ] Deployed URL loads (Vercel)
+- [ ] `git clone` works; `node server.js` (or `PORT=8080 node server.js`, or `python3 -m http.server 8000`) serves the site
+- [ ] Deployed URL loads (Vercel) once deployed — see `docs/DEPLOYMENT.md`
 - [ ] No console errors on any page
 
 ## Header / Footer (all pages)
@@ -13,31 +15,40 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Header and footer render on every page (injected component)
 - [ ] Active nav link highlighted on the current page
 - [ ] Cart badge shows correct total count and updates when cart changes
-- [ ] Account area switches between "Sign in / Sign up" and "Hi, name / Log out"
+- [ ] Account area switches between "Log In / Register" and "Hi, name / Sign out"
+- [ ] Signed-in users get redirected away from `login.html`/`register.html`
+- [ ] Logo favicon shows in the browser tab on every page
 - [ ] Mobile: hamburger opens/closes the nav; links work
 
 ## Menu
 
-- [ ] All menu items render with image, name, category and price
-- [ ] Category filter shows only matching items; "All" restores everything
-- [ ] Search narrows results; no-results state shows a helpful message
-- [ ] "Add to cart" from any card works and shows a toast
+- [ ] All local menu items render with image, name, category and price (18 Nigerian dishes)
+- [ ] Live feed loads ~9 international dishes (TheMealDB); if images fail, a neutral placeholder shows (never a broken image)
+- [ ] Category chips filter correctly; "All" restores everything
+- [ ] Search narrows local results instantly; no phony matches (e.g. "jollof" finds local dishes)
+- [ ] Searching an unknown dish (e.g. "pizza") shows a loading spinner, then up to 6 live results tagged "Live results for …"
+- [ ] "Load More" reveals 9 more cards and hides when the list ends
+- [ ] **Signed out:** clicking Add to Cart shows a sign-in/register toast and does **not** add anything
+- [ ] **Signed in:** clicking Add to Cart adds the item, flashes "Added ✓", and the header badge increments
+- [ ] Live-search results can be added to cart (signed in)
 
-## Cart
+## Cart (once the cart-page stream lands)
 
 - [ ] Items added appear in the cart with correct quantities
 - [ ] Quantity +/- updates line total and overall total
-- [ ] Remove deletes an item; empty cart shows an empty state with a CTA
+- [ ] Remove deletes an item; "Clear cart" empties it
+- [ ] Empty cart shows an empty state with a "Browse Menu" CTA
 - [ ] Cart persists after page refresh
+- [ ] An empty cart cannot reach checkout
 
-## Checkout & Orders
+## Checkout & Orders (once the checkout stream lands)
 
+- [ ] Signed-out users are sent to login
 - [ ] Empty cart cannot reach checkout
 - [ ] Checkout form validates: name, valid email, valid phone, address
 - [ ] Invalid fields show inline errors and focus the first bad field
-- [ ] Placing an order clears the cart and shows a success confirmation
-- [ ] New order appears in My Orders with status "Pending"
-- [ ] Order history persists after refresh
+- [ ] Placing an order clears the cart and shows a success confirmation; order lands in My Orders as "Pending"
+- [ ] Order history persists after refresh; empty state shows "No orders yet"
 
 ## Auth
 
@@ -46,11 +57,17 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Logout clears the session; header returns to signed-out state
 - [ ] Demo account works: `demo@student.com` / `demo123`
 
+## Contact (once the contact-validation stream lands)
+
+- [ ] Bad email + short message are blocked with visible per-field errors
+- [ ] Valid submit saves to `foodMessages` and shows success; form clears
+
 ## Security / Accessibility
 
 - [ ] Typing `<script>` into inputs is displayed as text (escaped), never executed
 - [ ] All forms have labels; focus rings visible; pages keyboard-navigable
-- [ ] Skip link present and functional on each page
+- [ ] Most `aria` attributes present (nav toggle, live regions/toasts, status messages)
+- [ ] Toast prompts are announced by screen readers (`aria-live`)
 
 ## Records (fill in during QA)
 

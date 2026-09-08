@@ -13,37 +13,41 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 
 ## 4. Technologies and Why (1 slide)
 
-- HTML, CSS, JavaScript (vanilla), localStorage
-- Why: demonstrate core web technologies, easy to run and host
+- HTML, CSS, JavaScript (vanilla), localStorage, TheMealDB external API
+- Why: demonstrate core web technologies, easy to run and host, plus live data without a backend
 
 ## 5. Major Features (1-2 slides)
 
-- Menu + category filter + search
-- Cart and quantity management
+- Local Nigerian menu + live TheMealDB feed (category filters, search, Load More)
+- Live search: unknown dishes are pulled from the API and rendered as tagged results
+- Cart and quantity management (auth-gated add-to-cart with sign-in toast)
 - Checkout flow and order history
 - Authentication (register / login / logout)
 
 ## 6. System Architecture and Design (1 slide)
 
 - Page flow diagram: Home -> Menu -> Cart -> Checkout -> Orders
-- Data model: localStorage keys (users, session, cart, orders)
+- Client-to-API: TheMealDB feed/search layer with session cache and offline fallbacks
+- Data model: localStorage keys (users, session, cart, orders, menu cache)
 
 ## 7. Live Demonstration (3-5 minutes)
 
-- Show: browse + filter menu, add to cart, checkout, view orders
-- Show: login with demo account `demo@student.com` / `demo123`
+- Show: browse + filter menu, live feed, search (try "pizza"), add to cart, checkout, view orders
+- Show: signed-out add-to-cart shows the sign-in toast; login with demo account `demo@student.com` / `demo123`
 - Show: responsive mobile view + empty/error states
 
 ## 8. Implementation Highlights (1-2 slides)
 
 - Reusable header/footer component
-- Dynamic menu rendering from data
+- Dynamic menu rendering from data (local catalogue + live API feed)
 - Form validation and input escaping
+- WebCrypto-salted password hashing and auth-gated cart
 - Mobile nav and accessibility
 
 ## 9. Client-Server Interaction (1 slide)
 
-- Client-side only in this version; where a backend would fit; future API plan
+- Client-side only in this version; live external API (TheMealDB) for the feed/search with caching
+- Where a backend would fit (orders, payments, real delivery); future API plan
 
 ## 10. Testing Carried Out (1 slide)
 
