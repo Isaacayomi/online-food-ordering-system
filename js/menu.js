@@ -16,6 +16,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchedQuery = "";
   let searchSeq = 0;
   let debounceTimer = null;
+  let promptTimer = null;
+
+  function showCartPrompt() {
+    const promptNode = document.querySelector("#menu-cart-prompt");
+    if (!promptNode) return;
+    promptNode.hidden = false;
+    promptNode.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    window.clearTimeout(promptTimer);
+    promptTimer = window.setTimeout(() => {
+      promptNode.hidden = true;
+    }, 6000);
+  }
 
   function cardHTML(item, flag) {
     return `
@@ -156,6 +168,15 @@ document.addEventListener("DOMContentLoaded", () => {
   grid.addEventListener("click", (event) => {
     const button = event.target.closest(".btn-add");
     if (!button || typeof Cart === "undefined") return;
+
+    const signedIn = typeof Auth !== "undefined" && Auth.isSignedIn();
+    if (!signedIn) {
+      showCartPrompt();
+      button.textContent = "Sign in to order";
+      window.setTimeout(() => (button.textContent = "Add to Cart"), 1600);
+      return;
+    }
+
     const card = button.closest(".menu-card");
     Cart.add({
       id: card.dataset.foodId,

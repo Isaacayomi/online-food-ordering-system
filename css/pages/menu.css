@@ -81,6 +81,29 @@
   text-align: center;
 }
 
+.menu-cart-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 40px;
+  color: var(--ink);
+  font-size: 16px;
+  text-align: center;
+}
+
+.menu-cart-prompt a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.menu-cart-prompt a:hover {
+  color: #902a32;
+}
+
 .spinner {
   width: 20px;
   height: 20px;
