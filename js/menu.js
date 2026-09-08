@@ -53,9 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return all.filter((item) => matchesQuery(item, query) && (filter === "all" || item.category === filter));
   }
 
+  function clearStatus() {
+    status.hidden = true;
+    status.replaceChildren();
+  }
+
   function render() {
     grid.replaceChildren();
-    status.hidden = true;
     loadMoreBtn.hidden = true;
 
     const query = searchInput.value.trim().toLowerCase();
@@ -68,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       return;
     }
+
+    clearStatus();
 
     if (liveResults) {
       const filter = activeFilter();
