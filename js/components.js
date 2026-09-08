@@ -51,14 +51,17 @@ const footerHTML = `
     <div class="site-shell footer-bottom">Copyright © 2026 CampusEats. All Rights Reserved.</div>
   </footer>`;
 
+const ON_AUTH_PAGE = pageName === "login.html" || pageName === "register.html";
+
 function renderAuthState() {
   const host = document.querySelector("#auth-state");
   if (!host) return;
   host.replaceChildren();
 
-  const user = window.Auth ? Auth.current() : null;
+  const signedIn = typeof Auth !== "undefined" && Boolean(Auth.current());
 
-  if (user) {
+  if (signedIn) {
+    const user = Auth.current();
     const welcome = document.createElement("span");
     welcome.className = "auth-welcome";
     welcome.textContent = `Hi, ${user.firstName || user.email.split("@")[0]}`;
@@ -68,13 +71,13 @@ function renderAuthState() {
     signOut.className = "auth-button";
     signOut.textContent = "Sign out";
     signOut.addEventListener("click", () => {
-      if (window.Auth) Auth.logout();
+      if (typeof Auth !== "undefined") Auth.logout();
       renderAuthState();
       renderCartBadge();
     });
 
     host.append(welcome, signOut);
-  } else {
+  } else if (!ON_AUTH_PAGE) {
     const loginLink = document.createElement("a");
     loginLink.className = "auth-link";
     loginLink.href = `${rootPath}/login.html`;
@@ -92,7 +95,7 @@ function renderAuthState() {
 function renderCartBadge() {
   const badge = document.querySelector("#cart-badge");
   if (!badge) return;
-  const count = window.Cart ? Cart.count() : 0;
+  const count = typeof Cart !== "undefined" ? Cart.count() : 0;
   badge.textContent = String(count);
   badge.hidden = count === 0;
 }

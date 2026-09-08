@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const homeUrl = window.location.pathname.includes("/pages/") ? "../index.html" : "index.html";
+
+  if (typeof Auth !== "undefined" && Auth.isSignedIn()) {
+    window.location.replace(homeUrl);
+    return;
+  }
+
   const loginForm = document.querySelector("#login-form");
   const registerForm = document.querySelector("#register-form");
 

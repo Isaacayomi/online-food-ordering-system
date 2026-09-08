@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const PAGE_SIZE = 9;
+  const SEARCH_DEBOUNCE = 350;
   const grid = document.querySelector("#menu-grid");
   const status = document.querySelector("#menu-status");
   const loadMoreBtn = document.querySelector("#load-more");
@@ -10,14 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let all = [...Menu.CATALOG];
   let shown = PAGE_SIZE;
+  let liveResults = null;
+  let searchingLive = false;
+  let searchedQuery = "";
+  let searchSeq = 0;
+  let debounceTimer = null;
 
-  function cardHTML(item) {
-    const imageURL = Menu.url(item);
-    const fallbackURL = Menu.fallback(item);
+  function cardHTML(item, flag) {
     return `
       <article class="menu-card" data-category="${item.category}" data-food-id="${item.id}" data-price="${item.price}">
         <div class="menu-card-media">
-          <img src="${imageURL}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackURL}'">
+          <img src="${Menu.url(item)}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src=Menu.PLACEHOLDER">
+          ${flag ? `<span class="card-flag">${Utils.escapeHTML(flag)}</span>` : ""}
         </div>
         <div class="menu-card-body">
           <div class="menu-card-top">
@@ -30,27 +35,61 @@ document.addEventListener("DOMContentLoaded", () => {
       </article>`;
   }
 
-  function currentMatches() {
-    const active = chips.find((c) => c.classList.contains("is-active"))?.dataset.filter || "all";
+  function activeFilter() {
+    return chips.find((c) => c.classList.contains("is-active"))?.dataset.filter || "all";
+  }
+
+  function matchesQuery(item, query) {
+    return (
+      !query ||
+      item.name.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query)
+    );
+  }
+
+  function localMatches() {
     const query = searchInput.value.trim().toLowerCase();
-    return all.filter((item) => {
-      const matchCategory = active === "all" || item.category === active;
-      const matchQuery = !query || item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query);
-      return matchCategory && matchQuery;
-    });
+    const filter = activeFilter();
+    return all.filter((item) => matchesQuery(item, query) && (filter === "all" || item.category === filter));
   }
 
   function render() {
-    const matches = currentMatches();
     grid.replaceChildren();
+    status.hidden = true;
+    loadMoreBtn.hidden = true;
+
+    const query = searchInput.value.trim().toLowerCase();
+
+    if (searchingLive) {
+      status.hidden = false;
+      status.textContent = `Searching the live menu for "${searchInput.value.trim()}"…`;
+      return;
+    }
+
+    if (liveResults) {
+      const filter = activeFilter();
+      const items = liveResults.filter((item) => filter === "all" || item.category === filter);
+      items.forEach((item) => grid.insertAdjacentHTML("beforeend", cardHTML(item, `Live results for "${searchedQuery}"`)));
+
+      if (!items.length) {
+        status.hidden = false;
+        status.textContent = `No "${searchedQuery}" dishes in this category.`;
+      }
+      return;
+    }
+
+    const matches = localMatches();
     matches.slice(0, shown).forEach((item) => grid.insertAdjacentHTML("beforeend", cardHTML(item)));
 
-    status.hidden = matches.length !== 0;
-    status.textContent = searchInput.value.trim()
-      ? `No dishes match "${searchInput.value.trim()}".`
-      : "No dishes in this category right now.";
+    if (!matches.length) {
+      status.hidden = false;
+      status.textContent = query
+        ? `No dishes match "${searchInput.value.trim()}" — we're searching the live menu…`
+        : "No dishes in this category right now.";
+      return;
+    }
 
-    loadMoreBtn.hidden = !matches.length || shown >= matches.length;
+    loadMoreBtn.hidden = shown >= matches.length;
   }
 
   function loadMore() {
@@ -61,6 +100,33 @@ document.addEventListener("DOMContentLoaded", () => {
   function resetPaging() {
     shown = PAGE_SIZE;
     render();
+  }
+
+  function onQueryChange() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    liveResults = null;
+    searchingLive = false;
+    searchedQuery = "";
+    searchSeq += 1;
+
+    if (query && !localMatches().length) {
+      searchingLive = true;
+      render();
+
+      const token = searchSeq;
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(async () => {
+        const items = await Menu.search(query);
+        if (token !== searchSeq) return;
+        searchingLive = false;
+        liveResults = items;
+        searchedQuery = query;
+        render();
+      }, SEARCH_DEBOUNCE);
+    } else {
+      resetPaging();
+    }
   }
 
   chips.forEach((chip) => {
@@ -75,12 +141,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  searchInput?.addEventListener("input", resetPaging);
+  searchInput?.addEventListener("input", onQueryChange);
   loadMoreBtn?.addEventListener("click", loadMore);
 
   grid.addEventListener("click", (event) => {
     const button = event.target.closest(".btn-add");
-    if (!button || !window.Cart) return;
+    if (!button || typeof Cart === "undefined") return;
     const card = button.closest(".menu-card");
     Cart.add({
       id: card.dataset.foodId,
