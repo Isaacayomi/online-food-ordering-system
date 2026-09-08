@@ -16,17 +16,31 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchedQuery = "";
   let searchSeq = 0;
   let debounceTimer = null;
-  let promptTimer = null;
+  let toastEl = null;
+  let toastTimer = null;
 
-  function showCartPrompt() {
-    const promptNode = document.querySelector("#menu-cart-prompt");
-    if (!promptNode) return;
-    promptNode.hidden = false;
-    promptNode.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    window.clearTimeout(promptTimer);
-    promptTimer = window.setTimeout(() => {
-      promptNode.hidden = true;
-    }, 6000);
+  function showCartToast() {
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.className = "toast";
+      toastEl.setAttribute("role", "status");
+      toastEl.setAttribute("aria-live", "polite");
+
+      const login = document.createElement("a");
+      login.href = `${window.location.pathname.includes("/pages/") ? "../" : ""}login.html`;
+      login.textContent = "sign in";
+
+      const register = document.createElement("a");
+      register.href = `${window.location.pathname.includes("/pages/") ? "../" : ""}register.html`;
+      register.textContent = "create an account";
+
+      toastEl.append("Please ", login, " or ", register, " to add items to your cart.");
+      document.body.appendChild(toastEl);
+    }
+
+    toastEl.classList.add("is-visible");
+    window.clearTimeout(toastTimer);
+    window.setTimeout(() => toastEl.classList.remove("is-visible"), 4000);
   }
 
   function cardHTML(item, flag) {
@@ -171,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const signedIn = typeof Auth !== "undefined" && Auth.isSignedIn();
     if (!signedIn) {
-      showCartPrompt();
+      showCartToast();
       button.textContent = "Sign in to order";
       window.setTimeout(() => (button.textContent = "Add to Cart"), 1600);
       return;
