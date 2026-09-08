@@ -1,0 +1,22 @@
+.contact-hero { padding-bottom: 96px; }
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid #dbdfd0;
+  border-radius: 24px;
+  padding: 16px 24px;
+  color: #2c2f24;
+  background: #fff;
+  font: inherit;
+  outline: none;
+  resize: vertical;
+}
+.contact-form textarea::placeholder { color: #737865; }
+.contact-form textarea:focus { border-color: #ad343e; box-shadow: 0 0 0 3px rgba(173,52,62,.12); }
