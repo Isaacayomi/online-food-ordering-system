@@ -62,7 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (searchingLive) {
       status.hidden = false;
-      status.textContent = `Searching the live menu for "${searchInput.value.trim()}"…`;
+      status.replaceChildren(
+        Object.assign(document.createElement("span"), { className: "spinner", role: "status", "aria-label": "Loading" }),
+        document.createTextNode(` Searching the live menu for "${searchInput.value.trim()}"…`)
+      );
       return;
     }
 
