@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const homeUrl = window.location.pathname.includes("/pages/") ? "../index.html" : "index.html";
   const loginForm = document.querySelector("#login-form");
   const registerForm = document.querySelector("#register-form");
 
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await Auth.login(email, password);
       if (result.ok) {
         showStatus(loginForm, "Signed in! Redirecting…", false);
-        window.location.href = "../index.html";
+        window.location.href = homeUrl;
       } else {
         showStatus(loginForm, result.error);
       }
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await Auth.register(data);
       if (result.ok) {
         showStatus(registerForm, "Account created! Redirecting…", false);
-        window.location.href = "../index.html";
+        window.location.href = homeUrl;
       } else {
         showStatus(registerForm, result.error);
       }

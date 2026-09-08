@@ -45,7 +45,7 @@ const footerHTML = `
         </div>
       </section>
       <section class="footer-links"><h2>Pages</h2><a href="${isPage ? "../index.html" : "index.html"}">Home</a><a href="${pageLink("about.html")}">About</a><a href="${pageLink("menu.html")}">Menu</a><a href="${pageLink("contact.html")}">Contact</a><a href="${pageLink("cart.html")}">Cart</a></section>
-      <section class="footer-links"><h2>Utility Pages</h2><a href="${pageLink("login.html")}">Log In</a><a href="${pageLink("register.html")}">Create Account</a><a href="${pageLink("orders.html")}">My Orders</a></section>
+      <section class="footer-links"><h2>Utility Pages</h2><a href="${rootPath}/login.html">Log In</a><a href="${rootPath}/register.html">Create Account</a><a href="${pageLink("orders.html")}">My Orders</a></section>
       <section class="footer-links"><h2>Contact</h2><span>Obafemi Awolowo University</span><span>Mon - Sat: 8:00am - 9:00pm</span></section>
     </div>
     <div class="site-shell footer-bottom">Copyright © 2026 CampusEats. All Rights Reserved.</div>
@@ -77,12 +77,12 @@ function renderAuthState() {
   } else {
     const loginLink = document.createElement("a");
     loginLink.className = "auth-link";
-    loginLink.href = pageLink("login.html");
+    loginLink.href = `${rootPath}/login.html`;
     loginLink.textContent = "Log In";
 
     const registerLink = document.createElement("a");
     registerLink.className = "auth-link";
-    registerLink.href = pageLink("register.html");
+    registerLink.href = `${rootPath}/register.html`;
     registerLink.textContent = "Register";
 
     host.append(loginLink, registerLink);
