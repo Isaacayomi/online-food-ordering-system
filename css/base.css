@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
+:root { --ink: #2c2f24; --charcoal: #474747; --cream: #f9f9f7; --sage: #dbdfd0; --muted: #adb29e; --footer-text: #dbdfd0; --accent: #ad343e; }
+* { box-sizing: border-box; }
+html { min-height: 100%; }
+body { min-height: 100vh; margin: 0; display: flex; flex-direction: column; color: var(--ink); background: var(--cream); font-family: 'DM Sans', Arial, sans-serif; }
+body.no-scroll { overflow: hidden; }
+a { color: inherit; }
+main { flex: 1; min-height: 20vh; display: flex; flex-direction: column; justify-content: center; }

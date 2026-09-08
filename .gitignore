@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editors
+.vscode/
+.idea/
+
+# AI tool scratch dirs
+.codex/
+.agents/
+
+# Logs
+*.log
+
+# Node (if any tooling is added later)
+node_modules/
+npm-debug.log*
