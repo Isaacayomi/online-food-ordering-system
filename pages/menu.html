@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,136 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/pages/menu.css">
 </head>
+
 <body>
-  <main id="main"></main>
+  <main id="main">
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Menu | CampusEats</title>
+      <link rel="stylesheet" href="../css/base.css">
+      <link rel="stylesheet" href="../css/components.css">
+      <link rel="stylesheet" href="../css/pages/menu.css">
+    </head>
+
+    <body>
+      <main id="main">
+        <section class="menu-hero">
+          <div class="site-shell menu-heading">
+            <p class="eyebrow">Our Menu</p>
+            <h1>Made fresh, made for campus</h1>
+            <p>Browse today's picks from quick bites between classes to a proper sit-down meal.</p>
+          </div>
+
+          <div class="site-shell menu-filters" role="tablist" aria-label="Menu categories">
+            <button class="filter-chip is-active" type="button" data-filter="all">All</button>
+            <button class="filter-chip" type="button" data-filter="starters">Starters</button>
+            <button class="filter-chip" type="button" data-filter="mains">Mains</button>
+            <button class="filter-chip" type="button" data-filter="drinks">Drinks</button>
+            <button class="filter-chip" type="button" data-filter="desserts">Desserts</button>
+          </div>
+        </section>
+
+        <section class="site-shell menu-grid">
+          <article class="menu-card" data-category="starters">
+            <div class="menu-card-media">
+              <img src="../assets/menu/spring-rolls.jpg" alt="Crispy vegetable spring rolls">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Veggie Spring Rolls</h3>
+                <span class="price">₦1,200</span>
+              </div>
+              <p>Crispy rolls filled with cabbage, carrot and glass noodles, served with sweet chilli dip.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="menu-card" data-category="mains">
+            <div class="menu-card-media">
+              <img src="../assets/menu/jollof-chicken.jpg" alt="Jollof rice with grilled chicken">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Jollof & Grilled Chicken</h3>
+                <span class="price">₦3,500</span>
+              </div>
+              <p>Smoky party-style jollof rice with a quarter grilled chicken and fried plantain.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="menu-card" data-category="mains">
+            <div class="menu-card-media">
+              <img src="../assets/menu/fried-rice.jpg" alt="Fried rice with beef">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Fried Rice & Beef</h3>
+                <span class="price">₦3,200</span>
+              </div>
+              <p>Classic Nigerian fried rice loaded with vegetables, served with peppered beef.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="menu-card" data-category="drinks">
+            <div class="menu-card-media">
+              <img src="../assets/menu/chapman.jpg" alt="Glass of chapman drink">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Chapman</h3>
+                <span class="price">₦900</span>
+              </div>
+              <p>A refreshing mix of soft drinks, grenadine and fresh fruit, served chilled.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="menu-card" data-category="drinks">
+            <div class="menu-card-media">
+              <img src="../assets/menu/zobo.jpg" alt="Glass of zobo drink">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Zobo</h3>
+                <span class="price">₦700</span>
+              </div>
+              <p>Hibiscus drink infused with ginger, pineapple and a hint of mint.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+
+          <article class="menu-card" data-category="desserts">
+            <div class="menu-card-media">
+              <img src="../assets/menu/puff-puff.jpg" alt="Plate of puff puff">
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <h3>Puff Puff (6 pcs)</h3>
+                <span class="price">₦800</span>
+              </div>
+              <p>Soft, golden fried dough balls, lightly sweetened a campus favourite.</p>
+              <button class="btn-add" type="button">Add to Cart</button>
+            </div>
+          </article>
+        </section>
+      </main>
+      <script src="../js/storage.js"></script>
+      <script src="../js/utils.js"></script>
+      <script src="../js/data.js"></script>
+      <script src="../js/cart.js"></script>
+      <script src="../js/auth.js"></script>
+      <script src="../js/components.js"></script>
+      <script src="../js/menu.js"></script>
+    </body>
+
+    </html>
+  </main>
   <script src="../js/storage.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/data.js"></script>
@@ -17,4 +146,5 @@
   <script src="../js/auth.js"></script>
   <script src="../js/components.js"></script>
 </body>
+
 </html>
