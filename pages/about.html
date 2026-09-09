@@ -10,7 +10,105 @@
   <link rel="stylesheet" href="../css/pages/about.css">
 </head>
 <body>
-  <main id="main"></main>
+  <main id="main" class="about-page">
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="site-shell about-hero__inner">
+        <p class="eyebrow">Our story</p>
+        <h1 id="about-title">About CampusEats</h1>
+        <p class="about-hero__lede">
+          CampusEats is a lightweight online food ordering platform built for
+          university students, so a good meal is never more than a few taps away.
+        </p>
+      </div>
+    </section>
+
+    <section class="site-shell about-split" aria-label="What and why">
+      <div class="about-block">
+        <h2>What is CampusEats?</h2>
+        <p>
+          A simple web-based food ordering system where students browse a menu of
+          meals and drinks, add what they fancy to a cart, and place an order in
+          minutes. Every dish belongs to a clearly labelled category, prices come
+          straight from the menu, and a curated Nigerian collection sits alongside
+          a live international feed pulled from TheMealDB on load.
+        </p>
+        <p>
+          Order history is stored so students can always look back at what they
+          ordered, when, and how much it cost. It runs entirely in the browser,
+          with data persisted locally — no server to maintain, no app to install.
+        </p>
+      </div>
+      <div class="about-block">
+        <h2>Why we built it</h2>
+        <p>
+          Ordering between lectures on campus usually means long phone queues,
+          orders taken down by ear, and no proof of what was ordered or when.
+          That process is slow, easy to get wrong, and leaves no trail for the
+          student or the vendor.
+        </p>
+        <p>
+          CampusEats replaces the phone call with a browser: browse a menu at your
+          own pace, build a cart, pay-attention checkout with delivery details,
+          and keep a record of every order — all in one lightweight page.
+        </p>
+      </div>
+    </section>
+
+    <section class="site-shell about-features" aria-labelledby="features-title">
+      <h2 id="features-title">What CampusEats does</h2>
+      <div class="about-card-grid">
+        <article class="about-card">
+          <span class="about-card__icon" aria-hidden="true">☕</span>
+          <h3>Browse the menu</h3>
+          <p>
+            A Nigerian catalogue with real photos and prices, plus a live dish
+            feed and instant search for anything in-between.
+          </p>
+        </article>
+        <article class="about-card">
+          <span class="about-card__icon" aria-hidden="true">◒</span>
+          <h3>Add to cart</h3>
+          <p>
+            Build your order line by line — adjust quantities, remove items and
+            see your running total update on the spot.
+          </p>
+        </article>
+        <article class="about-card">
+          <span class="about-card__icon" aria-hidden="true">◆</span>
+          <h3>Checkout &amp; track</h3>
+          <p>
+            Enter delivery details, place your order and watch it land in My
+            Orders with a clear status, ready to review any time.
+          </p>
+        </article>
+        <article class="about-card">
+          <span class="about-card__icon" aria-hidden="true">⌖</span>
+          <h3>Your account</h3>
+          <p>
+            Sign up, sign in and sign out with a personal account that keeps your
+            cart and order history safe between visits.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-cta" aria-label="Get started">
+      <div class="site-shell about-cta__inner">
+        <h2>Ready for your next meal break?</h2>
+        <p>
+          Explore today's menu or create an account and make your first order in
+          under a minute.
+        </p>
+        <div class="about-cta__actions">
+          <a class="about-button about-button--red" href="menu.html"
+            >Explore the Menu</a
+          ><a class="about-button about-button--line" href="../register.html"
+            >Create an Account</a
+          >
+        </div>
+      </div>
+    </section>
+  </main>
   <script src="../js/storage.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/data.js"></script>
