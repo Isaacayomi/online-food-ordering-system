@@ -23,14 +23,10 @@
   text-align: center;
 }
 .hero-content {
-  position: absolute;
+  position: relative;
   z-index: 1;
-  left: 42.6%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(25.2%, 30rem);
-  max-width: 660px;
-  padding: 0;
+  max-width: 760px;
+  padding: 88px 0;
 }
 .hero-content h1 {
   margin: 0 0 23px;
@@ -434,11 +430,6 @@
     min-height: 530px;
   }
   .hero-content {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    width: auto;
     padding: 60px 0;
   }
 }
@@ -450,11 +441,6 @@
     min-height: 520px;
   }
   .hero-content {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    width: auto;
     padding: 40px 0;
   }
   .hero-content h1 {
