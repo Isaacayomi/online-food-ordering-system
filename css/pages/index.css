@@ -16,6 +16,7 @@
   position: relative;
   display: grid;
   min-height: 570px;
+  aspect-ratio: 2250 / 1500;
   place-items: center;
   overflow: hidden;
   background: #f9f9f7 url(../../assets/hero.png) center/cover no-repeat;
