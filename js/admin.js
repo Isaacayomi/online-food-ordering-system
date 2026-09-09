@@ -224,7 +224,27 @@ document.addEventListener("DOMContentLoaded", () => {
     order.updatedAt = Date.now();
     Storage.set("foodOrders", orders);
 
-    renderList();
+    const card = select.closest(".order-card");
+    if (card) {
+      const badge = card.querySelector(".order-status");
+      if (badge) {
+        badge.className = badge.className
+          .split(" ")
+          .filter((className) => !className.startsWith("order-status--"))
+          .concat(`order-status--${statusKey(newStatus)}`)
+          .join(" ");
+        badge.textContent = newStatus;
+      }
+
+      if (activeFilter !== "all" && newStatus !== activeFilter) {
+        card.remove();
+        const list = document.querySelector("#orders-list");
+        if (list && !list.children.length) {
+          list.innerHTML = `<div class="empty-admin">No ${activeFilter} orders here yet.</div>`;
+        }
+      }
+    }
+
     renderCounts();
     showToast(`Order #${orderId} marked as ${newStatus}.`);
   });
