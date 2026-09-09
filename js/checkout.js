@@ -62,8 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <label for="phone">Phone Number</label>
                 <input id="phone" name="phone" type="tel"
   inputmode="numeric"
-  pattern="[0-9]*"
-  maxlength="15"
+  pattern="[0-9]{11}"
+  minlength="10"
+  maxlength="13"
   placeholder="Enter your phone number">
                 <small class="field-error" id="phone-error"></small>
               </div>
