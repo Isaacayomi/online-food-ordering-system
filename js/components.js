@@ -20,6 +20,7 @@ const headerHTML = `
       <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
       <nav class="nav-links" aria-label="Primary navigation">
         ${navItems.map(([label, href, file]) => `<a class="${pageName === file ? "is-active" : ""}" href="${href}">${label}</a>`).join("")}
+        <span class="auth-state auth-state--mobile" id="auth-state-mobile"></span>
       </nav>
       <span class="nav-actions">
         <a class="cart-link" href="${pageLink("cart.html")}" aria-label="Cart">
@@ -54,30 +55,37 @@ const footerHTML = `
 const ON_AUTH_PAGE = pageName === "login.html" || pageName === "register.html";
 
 function renderAuthState() {
-  const host = document.querySelector("#auth-state");
-  if (!host) return;
-  host.replaceChildren();
+  const hosts = [...document.querySelectorAll(".auth-state")];
+  if (!hosts.length) return;
 
   const signedIn = typeof Auth !== "undefined" && Boolean(Auth.current());
 
   if (signedIn) {
     const user = Auth.current();
-    const welcome = document.createElement("span");
-    welcome.className = "auth-welcome";
-    welcome.textContent = `Hi, ${user.firstName || user.email.split("@")[0]}`;
+    const name = `Hi, ${user.firstName || user.email.split("@")[0]}`;
+    hosts.forEach((host) => {
+      const welcome = document.createElement("span");
+      welcome.className = "auth-welcome";
+      welcome.textContent = name;
 
-    const signOut = document.createElement("button");
-    signOut.type = "button";
-    signOut.className = "auth-button";
-    signOut.textContent = "Sign out";
-    signOut.addEventListener("click", () => {
-      if (typeof Auth !== "undefined") Auth.logout();
-      renderAuthState();
-      renderCartBadge();
+      const signOut = document.createElement("button");
+      signOut.type = "button";
+      signOut.className = "auth-button";
+      signOut.textContent = "Sign out";
+      signOut.addEventListener("click", () => {
+        if (typeof Auth !== "undefined") Auth.logout();
+        renderAuthState();
+        renderCartBadge();
+      });
+
+      host.replaceChildren(welcome, signOut);
     });
+    return;
+  }
 
-    host.append(welcome, signOut);
-  } else if (!ON_AUTH_PAGE) {
+  if (ON_AUTH_PAGE) return;
+
+  hosts.forEach((host) => {
     const loginLink = document.createElement("a");
     loginLink.className = "auth-link";
     loginLink.href = `${rootPath}/login.html`;
@@ -88,8 +96,8 @@ function renderAuthState() {
     registerLink.href = `${rootPath}/register.html`;
     registerLink.textContent = "Register";
 
-    host.append(loginLink, registerLink);
-  }
+    host.replaceChildren(loginLink, registerLink);
+  });
 }
 
 function renderCartBadge() {
