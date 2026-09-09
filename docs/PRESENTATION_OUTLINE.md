@@ -18,7 +18,7 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 
 ## 5. Major Features (1-2 slides)
 
-- Local Nigerian menu + live TheMealDB feed (category filters, search, Load More)
+- Local 18-dish Nigerian menu (category filters, search, Load More) + live TheMealDB search fallback
 - Live search: unknown dishes are pulled from the API and rendered as tagged results
 - Cart and quantity management (auth-gated add-to-cart with sign-in toast)
 - Checkout flow and order history
@@ -32,21 +32,21 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 
 ## 7. Live Demonstration (3-5 minutes)
 
-- Show: home page (hero + featured dishes), browse + filter menu, live feed, search (try "pizza"), add to cart, checkout, view orders
+- Show: home page (hero + featured dishes), browse + filter menu, search (try "pizza") for live results, add to cart, checkout, view orders
 - Show: signed-out add-to-cart shows the sign-in toast; login with demo account `demo@student.com` / `demo123`
 - Show: responsive mobile view + empty/error states
 
 ## 8. Implementation Highlights (1-2 slides)
 
 - Reusable header/footer component
-- Dynamic menu rendering from data (local catalogue + live API feed)
+- Dynamic menu rendering from data (local catalogue + live search API)
 - Form validation and input escaping
 - WebCrypto-salted password hashing and auth-gated cart
 - Mobile nav and accessibility
 
 ## 9. Client-Server Interaction (1 slide)
 
-- Client-side only in this version; live external API (TheMealDB) for the feed/search with caching
+- Client-side only in this version; live external API (TheMealDB) powers on-demand search with caching
 - Where a backend would fit (orders, payments, real delivery); future API plan
 
 ## 10. Testing Carried Out (1 slide)

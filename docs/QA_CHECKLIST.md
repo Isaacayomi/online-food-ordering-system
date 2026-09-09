@@ -23,7 +23,7 @@ Run through these before the defence demo and record results in the table. Also 
 ## Menu
 
 - [ ] All local menu items render with image, name, category and price (18 Nigerian dishes)
-- [ ] Live feed loads ~9 international dishes (TheMealDB); if images fail, a neutral placeholder shows (never a broken image)
+- [ ] Menu loads ONLY the 18 local Nigerian dishes — no auto-loaded live feed; if images fail, a neutral placeholder shows (never a broken image)
 - [ ] Category chips filter correctly; "All" restores everything
 - [ ] Search narrows local results instantly; no phony matches (e.g. "jollof" finds local dishes)
 - [ ] Searching an unknown dish (e.g. "pizza") shows a loading spinner, then up to 6 live results tagged "Live results for …"

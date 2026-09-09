@@ -45,7 +45,7 @@ All open streams were merged into `dev`, then `dev` was merged into `main` via a
 
 - `for f in js/*.js; do node --check "$f"; done`
 - `PORT=8080 node server.js` smoke walkthrough: `/`, `/login.html`, `/register.html`, `/pages/menu.html`, plus about/cart/checkout/orders/contact — none blank, no console errors.
-- Menu shows 18 Nigerian dishes + 9 live dishes; search "pizza" returns live results.
+- Menu shows 18 Nigerian dishes (no auto-loaded live feed); search "pizza" returns live search results.
 - Signed-out add-to-cart shows the sign-in toast and adds nothing.
 - Demo login → header shows `Hi, Demo · Sign out`; cart badge increments.
 - Auth-gated cart, checkout and My Orders flows verified.
