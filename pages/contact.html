@@ -9,12 +9,67 @@
   <link rel="stylesheet" href="../css/pages/contact.css">
 </head>
 <body>
-  <main id="main"></main>
+  <main class="contact-page">
+  <section class="contact-hero">
+    <p style="color:#b3372f"><b>GET IN TOUCH</b></p>
+    <h1 class="title">Contact Us</h1>
+    <p>For any inquiries, feedback, or special requests, please reach out. We are at your service.</p> 
+  </section>
+
+  <section class="contact-form-section">
+    <form id="contactForm" class="contact-form" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your name">
+          <span class="error-message" id="nameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email address">
+          <span class="error-message" id="emailError"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="Write a subject">
+        <span class="error-message" id="subjectError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Write your message"></textarea>
+        <span class="error-message" id="messageError"></span>
+      </div>
+
+      <button type="submit" class="send-btn">Send</button>
+      <p class="form-success" id="formSuccess">Your message has been sent!</p>
+    </form>
+  </section>
+
+  <section class="contact-info">
+    <div class="info-block">
+      <h4>Call Us:</h4>
+      <p class="highlight">+234 911 059 9625 <br> +234 815 259 5588</p>
+    </div>
+    <div class="info-block">
+      <h4>Opening Hours:</h4>
+      <p class="highlight">Mon–Fri: 7am – 10pm<br>Sat–Sun: 10am – 7pm</p>
+    </div>
+    <div class="info-block">
+      <h4>Our Location:</h4>
+      <p class="highlight">OAU Campus<br>New Market</p>
+    </div>
+  </section>
+</main>
   <script src="../js/storage.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/data.js"></script>
   <script src="../js/cart.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/components.js"></script>
+  <script src="../js/pages/contact.js"></script>
 </body>
 </html>

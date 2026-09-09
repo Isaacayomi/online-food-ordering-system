@@ -1,0 +1,136 @@
+.contact-page {
+  font-family: 'Poppins', sans-serif;
+  background: rgb(228, 225, 225);
+  color: #2b2b2b;
+}
+
+.contact-hero {
+  text-align: center;
+  padding: 70px 20px 30px;
+}
+
+.contact-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.contact-hero p {
+  max-width: 500px;
+  margin: 0 auto;
+  color: #666;
+}
+
+.title {
+  font-size: 90px;
+}
+
+.contact-form-section {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.contact-form {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #b3372f;
+}
+
+.error-message {
+  color: #b3372f;
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+.send-btn {
+  width: 100%;
+  background: #b3372f;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.send-btn:hover {
+  background: #922c25;
+}
+
+.form-success {
+  display: none;
+  text-align: center;
+  color: #2f7a3a;
+  margin-top: 14px;
+  font-weight: 500;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap;
+  padding: 50px 20px 70px;
+  text-align: center;
+}
+
+.info-block h4 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 8px;
+}
+
+.info-block .highlight {
+  color: #b3372f;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
