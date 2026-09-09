@@ -17,19 +17,17 @@ const headerHTML = `
         <img src="${rootPath}/assets/logo-mark.svg" alt="" width="56" height="55">
         <span>CampusEats</span>
       </a>
-      <a class="header-orders-link user-only-action" href="${pageLink("orders.html")}" hidden>
-  My Orders
-</a>
       <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
       <nav class="nav-links" aria-label="Primary navigation">
         ${navItems.map(([label, href, file]) => `<a class="${pageName === file ? "is-active" : ""}" href="${href}">${label}</a>`).join("")}
         <span class="auth-state auth-state--mobile" id="auth-state-mobile"></span>
       </nav>
       <span class="nav-actions">
-        <a class="cart-link" href="${pageLink("cart.html")}" aria-label="Cart">
+        <a class="cart-link user-only-action" href="${pageLink("cart.html")}" aria-label="Cart">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="18" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.3a2 2 0 0 0 2 1.7h8.7a2 2 0 0 0 2-1.6L21.5 8H6"></path></svg>
           <span class="cart-badge" id="cart-badge" hidden>0</span>
         </a>
+        <a class="header-orders-link user-only-action" href="${pageLink("orders.html")}">My Orders</a>
         <span class="auth-state" id="auth-state"></span>
         <a class="table-button" href="${pageLink("checkout.html")}">Order Now</a>
       </span>
