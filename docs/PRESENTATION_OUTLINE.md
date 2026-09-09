@@ -32,7 +32,7 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 
 ## 7. Live Demonstration (3-5 minutes)
 
-- Show: browse + filter menu, live feed, search (try "pizza"), add to cart, checkout, view orders
+- Show: home page (hero + featured dishes), browse + filter menu, live feed, search (try "pizza"), add to cart, checkout, view orders
 - Show: signed-out add-to-cart shows the sign-in toast; login with demo account `demo@student.com` / `demo123`
 - Show: responsive mobile view + empty/error states
 

@@ -1,158 +1,90 @@
-# Open Streams & Task Briefs
+# Project Roadmap — Completed Streams
 
-> Status tracker for the remaining work. Each stream works from its own `feature/<name>` branch off `dev`, then opens a pull request **into `dev`**. The lead has already shipped the shared foundation — `docs/DATA_CONTRACT.md`, `js/storage.js`, `js/utils.js`, the **models** (`js/cart.js`, `js/auth.js`), the header/footer component, and the menu + live API layer — so nobody builds against air. **Every dish has a price** — from `data.js` `Menu.CATALOG` + the `PRICE_TABLET`; never invent one.
+> Every stream below has been shipped and merged into `dev`, then into `main` (the only path onto the protected production branch). Each stream was built on its own `feature/<name>` branch off `dev` and landed via an approved pull request into `dev`. Live app: [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app).
 
----
+## 1. Menu & API — ✅ merged
 
-## Before you start (everyone — do this once)
+**Branch:** `feat/live-menu-auth` (foundation)
 
-1. Get the latest branches (run this if your clone predates the recreation of `dev`):
+- 18-dish Nigerian catalogue (`js/data.js` `Menu.CATALOG`) with real food photos and prices (never an un-priced dish — `PRICE_TABLET` auto-prices live items).
+- Live TheMealDB feed: Chicken / Seafood / Dessert (3 each), cached in `foodMenu`, offline-safe.
+- On-demand live search (`Menu.search`) — unknown queries (e.g. "pizza") return up to 6 tagged live results, cached per query.
+- Category chips, instant search with spinner, "Load More" pagination (9 at a time).
+- Offline-safe image placeholder (`Menu.PLACEHOLDER`) — a card never shows a broken image.
+- Logo favicon.
 
-   ```sh
-   git fetch origin
-   ```
+**Files:** `js/data.js`, `js/menu.js`, `pages/menu.html`, `css/pages/menu.css`, `assets/`.
 
-2. Move to `dev` — it now contains the full shared foundation (menu, auth, cart model, header/footer, docs) — and create your stream branch from it:
+## 2. Auth & utilities — ✅ merged
 
-   ```sh
-   git checkout dev
-   git pull origin dev
-   git checkout -b feature/<your-stream>
-   ```
+**Branch:** `feat/live-menu-auth` (foundation)
 
-   > Don't base your work on `main` — `main` is only updated from `dev` at the end, and is currently behind `dev`.
+- Registration, sign in, sign out with client-side validation; demo account seeded on first run (`demo@student.com` / `demo123`).
+- WebCrypto salted SHA-256 password hashes; signed-in users redirected away from the auth pages.
+- Shared header/footer injected by `js/components.js` with mobile nav and active-link highlighting.
+- Auth-gated cart: signed-out add-to-cart shows a sign-in/register toast and adds nothing.
+- `js/utils.js` (`money`, `isEmpty`, `isEmail`, `escapeHTML`) and `js/storage.js` (namespaced localStorage helpers).
 
-3. Run the app while you work:
+**Files:** `js/auth.js`, `js/auth-pages.js`, `js/utils.js`, `js/storage.js`, `js/components.js`, `css/components.css`, `css/base.css`, `login.html`, `register.html`, `css/pages/login.css`, `css/pages/auth.css`.
 
-   ```sh
-   node server.js          # opens http://localhost:3000  (use PORT=8080 node server.js if 3000 is busy)
-   ```
+## 3. Cart page — ✅ merged
 
-4. When finished:
+**Branch:** `feature/cart-page`
 
-   ```sh
-   git add .
-   git commit -m "feat: <what you did>"
-   git push -u origin feature/<your-stream>
-   ```
+- Real cart rendered from `Cart.getItems()` — image, name, unit price, quantity stepper (− count +), line total, remove button.
+- Quantity steppers call `Cart.decrement/increment`; remove calls `Cart.remove`; "Clear cart" calls `Cart.clear()`.
+- Live summary from `Cart.totals()` (subtotal / flat ₦500 delivery / total), re-rendered on `cartchange` and on load.
+- Empty state ("Your cart is empty") with a "Browse Menu" CTA; an empty cart cannot reach checkout.
+- Items survive a page refresh (persistence via `Cart` → `foodCart`).
 
-   Then open a pull request on GitHub **into `dev`**. Do not merge your own PR — the lead reviews and merges it.
+**Files:** `pages/cart.html`, `css/pages/cart.css`, `js/cart-page.js`.
 
-**Rules for every stream:**
+## 4. Checkout & My Orders — ✅ merged
 
-- **Never touch shared files:** `js/storage.js`, `js/utils.js`, `js/cart.js`, `js/auth.js`, `js/data.js`, `js/components.js`, `css/base.css`, `css/components.css`.
-- Page-specific CSS goes only in `css/pages/<page>.css`.
-- Keep the existing script order and append your page's script **after** `js/components.js`.
-- All prices come from the data layer; never hardcode a dish price.
+**Branch:** `feature/checkout-orders`
 
----
+- Checkout requires a signed-in user (else redirect to login) and a non-empty cart.
+- Delivery form (name, email, phone, address) validated with `Utils` (`isEmail`, `isEmpty`) — inline field errors and a status line.
+- On success: an order `{id, userId, items, subtotal, delivery, total, address, date, status: "Pending"}` is saved to `foodOrders`, the cart is cleared, a confirmation shows, then the user is redirected to My Orders.
+- My Orders lists that user's orders (newest first) with item summary, date, total and a "Pending" badge; an empty state offers a "Browse Menu" CTA.
 
-## Done (merged foundation)
+**Files:** `pages/checkout.html`, `css/pages/checkout.css`, `js/checkout.js`, `pages/orders.html`, `css/pages/orders.css`, `js/orders.js`.
 
-- **Stream 1 · Menu & API** — 18-dish Nigerian catalogue with real photos and auto-curated prices; live TheMealDB feed; on-demand live search with loading spinner; category chips; search; Load More; offline-safe placeholders; logo favicon.
-- **Stream 4 core · Auth & utilities** — registration, sign in, sign out, demo-account seeding; shared header/footer via `js/components.js`; auth-aware header state; **auth-gated cart** (signed-out add-to-cart shows a sign-in/register toast); `js/utils.js`, `js/storage.js`.
+## 5. Contact page validation — ✅ merged
 
----
+**Branch:** `feature/contact-validation`
 
-## Stream 2 · Cart page
+- `js/contact.js` validates the existing `novalidate` form on submit: name (≥ 2 chars), email (`Utils.isEmail`), optional subject (≥ 3 chars if filled), message (≥ 10 chars), with per-field error text.
+- Valid submits save `{id, name, email, subject, message, date}` to `foodMessages` and show "Thanks — we'll respond within a day", then clear the form.
+- Reuses `.form-status` styling from `css/components.css` to match the auth cards.
 
-**Branch:** `feature/cart-page` — base it on `dev` (see "Before you start").
+**Files:** `pages/contact.html`, `js/contact.js` (page CSS reuses shared components).
 
-**Context:** the cart **model** is done (`Cart.getItems/add/increment/decrement/remove/clear/count/totals` → `foodCart`, dispatches `cartchange` on every change). The navbar cart icon + `#cart-badge` already live in `js/components.js`/`components.css` and update automatically. Your job is the cart **page**.
+## 6. Landing / home page — ✅ merged
 
-**Tasks:**
-1. **Replace the demo in `pages/cart.html` + `css/pages/cart.css`.** The current page is a static 2-item demo — throw it out and render from `Cart.getItems()`. The existing HTML is a scaffold with the hooks you'll need: `#cart-items`, `#cart-item-count`, `#clear-cart`, `#empty-cart` (hidden), `#subtotal`, `#delivery`, `#total`, `#checkout-button`. Each line shows image, name, unit price, **qty stepper (− count +)**, line total, remove button.
-   - Steppers call `Cart.decrement(id)` / `Cart.increment(id)`; remove calls `Cart.remove(id)`; "Clear cart" calls `Cart.clear()`.
-2. Summary block (live): `Cart.totals()` → subtotal / delivery (flat ₦500, ₦0 when empty) / total. Re-render on every `cartchange` **and** on load.
-3. **An empty cart must not reach checkout** — disable/hide the checkout action until items exist.
-4. Empty state: hide the list, show "Your cart is empty" + a "Browse Menu" button → `menu.html`.
-5. Verify items survive a **page refresh** (they should — persistence is already handled by `Cart`).
-6. Add one new file `js/cart-page.js` (script tag after `js/components.js`).
+**Branch:** `feature/home-page`
 
-**Do not touch:** `js/cart.js` unless something is truly broken — raise it in the PR instead. Also not `js/data.js`, `js/auth.js`, `js/components.js`.
+- Hero over the CampusEats design image with a single "Explore Menu" CTA (checkout lives in the header's "Order Now").
+- Browse Our Menu category cards, a featured-dishes strip rendered live from `Menu.CATALOG` (image, ₦ price, auth-gated add-to-cart via `js/home.js`), an about block with CampusEats delivery info, delivery info list and campus-student testimonials.
+- Concept copy only — no blog or event-services sections.
 
-**Test:** `node server.js`, open `http://localhost:3000/pages/menu.html`, add dishes, then check the cart page.
+**Files:** `index.html`, `css/pages/index.css`, `js/home.js`.
 
-**Acceptance:** menu → cart reflects items and quantities; steppers/removal update totals live; refresh keeps the cart; header badge count matches; empty cart cannot reach checkout.
+## 7. About page — ✅ merged
 
----
+**Branch:** `feature/about-page`
 
-## Stream 3 · Checkout & My Orders
+- Static platform-narrative page: hero ("Our story"), "What is CampusEats", "Why we built it", four capability cards (Browse / Cart / Checkout & track / Account) and a menu/account CTA.
+- Styled entirely in `css/pages/about.css` using the design tokens; no JS.
 
-**Branch:** `feature/checkout-orders` — base it on `dev` (see "Before you start").
-
-**Context:** `Cart` provides `totals()` (flat ₦500 delivery) and items; `Auth` (`Auth.current()` / `Auth.isSignedIn()`) gates access; `foodOrders` is your storage key; `pages/checkout.html` and `pages/orders.html` currently render an empty `<main>`.
-
-**Tasks — Checkout (`pages/checkout.html` + `css/pages/checkout.css` + new `js/checkout.js`):**
-1. Require a signed-in user (redirect to `../login.html`) **and** a non-empty cart.
-2. Delivery form (name, email, phone, address) validated with `Utils` (`isEmail`, `isEmpty`) — inline field errors + a status line.
-3. On success: build an order `{id, userId, items, subtotal, delivery, total, address, date, status: "Pending"}`, push it to `foodOrders` via `Storage`, clear the cart (`Cart.clear()`), show a confirmation, then redirect to `orders.html`.
-
-**Tasks — My Orders (`pages/orders.html` + `css/pages/orders.css` + new `js/orders.js`):**
-4. Require a signed-in user (redirect to `../login.html`).
-5. Render that user's orders from `foodOrders` (newest first) — item summary, date, total, and a "Pending" status badge.
-6. Empty state: "No orders yet" + a "Browse Menu" button → `menu.html`.
-
-**Do not touch:** `js/cart.js`, `js/auth.js`, `js/data.js`, `js/storage.js`, `js/components.js`.
-
-**Test:** `node server.js`. Signed-out users are sent to login; empty carts are blocked; invalid fields show errors; placing an order clears the cart, persists the order and it appears in My Orders (also after refresh).
-
-**Acceptance:** all of the above passes.
+**Files:** `pages/about.html`, `css/pages/about.css`.
 
 ---
 
-## Stream 4 · Contact page validation
+## Delivery rules that were enforced on every stream
 
-**Branch:** `feature/contact-validation` — base it on `dev` (see "Before you start").
-
-**Context:** `pages/contact.html` has a working form (`novalidate`, fields: name/email/subject/message) but **no JavaScript**. `Utils` (`isEmail`, `isEmpty`) and `Storage` are already available.
-
-**Tasks:**
-1. **Create `js/contact.js`** and wire it into `pages/contact.html` — add `<script src="../js/contact.js"></script>` **before** `js/components.js`, and add a `<p class="form-status" hidden></p>` + per-field error text to the form (styled to match the auth card look; reuse `.form-status` from `css/components.css`).
-2. **Validate on submit** (`preventDefault`):
-   - Name: non-empty, ≥ 2 chars
-   - Email: valid via `Utils.isEmail`
-   - Subject: optional, ≥ 3 chars if filled
-   - Message: non-empty, ≥ 10 chars
-   - Show the message under each failing field; clear errors on re-submit.
-3. **On success:** push `{id, name, email, subject, message, date}` into localStorage key `foodMessages` via `Storage.get/set`; show a success message ("Thanks — we'll respond within a day"); clear the form.
-
-**Do not touch:** `storage.js`, `utils.js`, `auth.js`, `data.js`, `cart.js`, `components.js`.
-
-**Test:** `node server.js`, open `http://localhost:3000/pages/contact.html`.
-
-**Acceptance:** bad email + short message are blocked with visible messages; a valid submit saves to `foodMessages` and shows success; no console errors.
-
----
-
-## Stream 4 · Landing / home page
-
-**Branch:** `feature/home-page` — base it on `dev` (see "Before you start").
-
-**Context:** `index.html` is intentionally a minimal stub (empty `<main>` + shared scripts) so the home page can be composed on top of the injected header/footer without conflicts. `css/base.css` exposes design tokens (`var(--color-primary)` etc.) and `Menu.CATALOG` has the data.
-
-**Tasks:**
-1. Build a hero + featured dishes section in `css/pages/index.css` and `index.html` (inside `<main id="main">`), pulling a few featured dishes (with images and prices) from `Menu.CATALOG`.
-2. Keep it responsive and consistent with the design tokens; no inline `<style>`.
-3. Do **not** touch `js/components.js` or the script order already present in `index.html`.
-
-**Test:** `node server.js`, open `http://localhost:3000/`.
-
-**Acceptance:** hero + featured dishes render, shared header/footer intact, responsive, no console errors.
-
----
-
-## Stream 5 · About page
-
-**Branch:** `feature/about-page` — base it on `dev` (see "Before you start").
-
-**Context:** `pages/about.html` currently renders an empty `<main>`. `css/pages/about.css` already exists for your page styles, and the shared component classes (`.card`, `.btn`, etc.) are available.
-
-**Tasks:**
-1. Build the About page inside `<main id="main">` in `pages/about.html`: a short intro to CampusEats, what it does, and why it was built (the project brief), using the shared layout components for a consistent look.
-2. Style it in `css/pages/about.css` only; keep it responsive.
-3. Do **not** touch shared JS or CSS files.
-
-**Test:** `node server.js`, open `http://localhost:3000/pages/about.html`.
-
-**Acceptance:** page renders with the shared header/footer, is responsive, no console errors.
+- Shared files (`js/storage.js`, `js/utils.js`, `js/cart.js`, `js/auth.js`, `js/data.js`, `js/components.js`, `css/base.css`, `css/components.css`) were owned by the lead; teammates only used them, never edited them.
+- Page-specific CSS lived only in `css/pages/<page>.css`.
+- Page scripts appended after `js/components.js` (contact page loads before it, per the brief).
+- All prices came from the data layer; no dish price was ever hardcoded on a page.
+- Every page loads the shared header/footer and shows no console errors.

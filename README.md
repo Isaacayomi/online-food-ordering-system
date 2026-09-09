@@ -4,7 +4,7 @@
 
 A simple web-based food ordering platform where users can view menus, add meals to a cart, and place orders - built with pure HTML, CSS and JavaScript, enriched with a live dish feed from the free [TheMealDB](https://www.themealdb.com) API.
 
-> **Status:** Functional core shipped. Menu (local Nigerian catalogue + live feed + live search), authentication, cart model and shared header/footer are implemented and verified. Remaining streams — the cart **page**, checkout + orders, contact validation and the landing/home page — are open and being completed before the public Vercel deployment.
+> **Status:** Complete. Every page is shipped and merged — landing page, menu, cart, checkout, My Orders, about and contact — and the app is deployed to Vercel at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app).
 
 ## Table of Contents
 
@@ -74,13 +74,19 @@ A simple, student-focused web ordering platform solves this by letting users bro
 - **Cart model & header badge** — `js/cart.js` (add/increment/decrement/remove/clear/totals) persisted to `foodCart`, exposed through a live cart badge in the navbar.
 - **Shared header/footer** — injected across pages by `js/components.js`, with mobile nav and active-link highlighting.
 - **Logo favicon** — the CampusEats logo mark (also in the navbar) serves as the site favicon.
+- **Landing page** — a hero over a real food photo with a single clear CTA, category shortcuts, a featured-dishes strip rendered live from the menu (with auth-gated add-to-cart), an about block, delivery info and campus testimonials.
+- **Cart page** — the real cart with quantity steppers, line totals, removal, "Clear cart", live subtotal/₦500-delivery/total, an empty state and a checkout action that is disabled until items exist.
+- **Checkout & My Orders** — a validated delivery-details form that creates a `Pending` order, and an order-history page (newest first) with an empty state.
+- **About page** — a platform narrative (what CampusEats is and why it was built) with a menu/account call-to-action.
+- **Contact validation** — the contact form validates name/email/subject/message, saves messages to `foodMessages` and shows success feedback.
 
-### In progress / open streams
+### Merged via per-stream PRs
 
-- **Cart page** — render the real cart with quantity steppers, removal, live totals (flat ₦500 delivery) and an empty state. See `docs/TASKS.md`.
-- **Checkout & My Orders** — validated delivery-details form, order creation, and an order-history page with status tracking. See `docs/TASKS.md`.
-- **Contact page** — JS validation on the existing form, saving messages and showing success feedback. See `docs/TASKS.md`.
-- **Landing / home page** — a home screen with hero and featured dishes.
+- **Cart page** (Stream 2) — `feature/cart-page`
+- **Checkout & My Orders** (Stream 3) — `feature/checkout-orders`
+- **Contact page validation** (Stream 4) — `feature/contact-validation`
+- **Landing / home page** (Stream 4) — `feature/home-page`
+- **About page** (Stream 5) — `feature/about-page`
 
 ## Minimum Project Requirements Coverage
 
@@ -89,8 +95,8 @@ A simple, student-focused web ordering platform solves this by letting users bro
 | HTML | Semantic elements (`header`, `nav`, `main`, `footer`, `section`, `article`) used across all pages. |
 | CSS | Component stylesheet with a consistent design system (tokens, responsive breakpoints, mobile navigation, animations). |
 | JavaScript | Dynamic menu rendering, live API feed + search, cart logic, form validation, authentication, shared component injection. |
-| Git/GitHub | Feature-branch workflow with pull requests into the protected `main` branch. See CONTRIBUTING.md. |
-| Web Hosting | Deploys to **Vercel** (static hosting) once all streams are merged; see docs/DEPLOYMENT.md. |
+| Git/GitHub | Feature-branch workflow: PRs into `dev`, then an approved `dev → main` PR. See CONTRIBUTING.md. |
+| Web Hosting | Deployed on **Vercel** (static hosting) at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app); auto-deploys on pushes to `main`. See docs/DEPLOYMENT.md. |
 | Usability & Accessibility | Keyboard-friendly, labelled forms, `aria` attributes, focus states, `aria-live` status/toasts, responsive across breakpoints. |
 | Security Awareness | Escaping of user-generated content on render, client-side validation, salted SHA-256 password hashes, and a documented review of client-side-only auth limits. |
 | Documentation | This README, plus docs/DATA_CONTRACT.md, docs/TASKS.md, docs/QA_CHECKLIST.md, docs/PRESENTATION_OUTLINE.md and docs/DEPLOYMENT.md. |
@@ -123,17 +129,17 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 
 ```
 .
-├── index.html              # Landing page (home stream in progress)
+├── index.html              # Landing page - hero, featured dishes, concept sections
 ├── login.html              # Sign in (root-level)
 ├── register.html           # Create account (root-level)
 ├── 404.html                # Custom 404 page for invalid routes
 ├── pages/                  # One HTML file per page
 │   ├── menu.html           # Menu with categories, search, live feed + pagination
-│   ├── cart.html           # Cart page (open stream)
-│   ├── checkout.html       # Delivery details + place order (open stream)
-│   ├── orders.html         # Order history (open stream)
-│   ├── about.html          # About the platform and team
-│   └── contact.html        # Contact form + details (validation stream)
+│   ├── cart.html           # Cart page with steppers and live totals
+│   ├── checkout.html       # Delivery details + place order
+│   ├── orders.html         # Order history
+│   ├── about.html          # About the platform
+│   └── contact.html        # Contact form + details (validated)
 ├── css/
 │   ├── base.css            # Design tokens, reset, [hidden] rule, typography
 │   ├── components.css      # Shared component styles (header/footer/cards)
@@ -150,7 +156,7 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 ├── docs/                   # Data contract, tasks, QA, presentation, deployment
 ├── .github/                # PR + issue templates
 ├── .gitignore
-├── vercel.json             # Static site config (being finalized, see docs/DEPLOYMENT.md)
+├── vercel.json             # Static site config (`cleanUrls: true`)
 ├── server.js               # Optional local dev server (no deps) with 404 fallback
 ├── CONTRIBUTING.md
 └── README.md
@@ -202,14 +208,13 @@ Password: demo123
 
 ## Deployment
 
-Deployment to **Vercel** is queued until the remaining streams are merged into `main`. The full plan — merge order, the `vercel.json` fix for multi-page static hosting, pre-deploy QA and tester handoff — is captured in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
+The app is **live on Vercel**: [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app). The deployment record — import settings, `vercel.json`, demo credentials and the earlier wrong-project mis-link that was resolved — is captured in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 At a glance:
 
-1. Merge all open-stream PRs into the protected `main` branch.
-2. Finalize `vercel.json` (multi-page static config; `cleanUrls` instead of the SPA catch-all rewrite).
-3. Run the pre-deploy QA walkthrough on merged `main` (`node --check`, local server smoke, tester flows).
-4. Import the repo at [vercel.com](https://vercel.com) ("Add New -> Project", framework preset "Other", empty build command) and deploy; Vercel auto-deploys on pushes to `main`.
+1. The repo was imported at [vercel.com](https://vercel.com) (framework preset "Other", empty build command, root `./`).
+2. `vercel.json` uses `{"cleanUrls": true}` — no SPA rewrite, so every real page serves and unknown routes fall back to `404.html`.
+3. Vercel auto-deploys on every push to `main`; no manual step is needed after a `dev → main` merge.
 
 > Note: the app must be served over HTTP/HTTPS (as Vercel provides) - a plain `file://` open will not resolve the shared scripts correctly. `localStorage` is scoped per origin, so the local `localhost` copy and the hosted URL keep separate carts/accounts, which is expected.
 
@@ -224,10 +229,10 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide. In short:
 ## Documentation
 
 - [Data contract (shared shapes & events)](docs/DATA_CONTRACT.md)
-- [Open streams & task briefs](docs/TASKS.md)
+- [Completed stream roadmap](docs/TASKS.md)
 - [QA / testing checklist](docs/QA_CHECKLIST.md)
 - [Presentation outline](docs/PRESENTATION_OUTLINE.md)
-- [Deployment plan (Vercel)](docs/DEPLOYMENT.md)
+- [Deployment record (Vercel)](docs/DEPLOYMENT.md)
 
 ## Contributors
 
