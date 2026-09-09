@@ -93,8 +93,8 @@ const Auth = (() => {
   }
 
   function logout() {
-    Storage.remove(SESSION_KEY);
-  }
+  Storage.remove(SESSION_KEY);
+}
 
   function require(href) {
     const signedIn = isSignedIn();

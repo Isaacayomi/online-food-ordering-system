@@ -1,0 +1,214 @@
+.checkout-page {
+  padding: 70px 24px 120px;
+  background: #f9f9f7;
+  min-height: 70vh;
+}
+
+.checkout-wrap {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.checkout-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.checkout-hero h1 {
+  margin: 0;
+  color: #2c2f24;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(42px, 6vw, 64px);
+}
+
+.checkout-hero p {
+  color: #737865;
+  margin: 12px 0 0;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 32px;
+  align-items: start;
+}
+
+.checkout-panel,
+.checkout-summary {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 3px 60px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-panel h2,
+.checkout-summary h2 {
+  margin: 0 0 24px;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.checkout-form {
+  display: grid;
+  gap: 20px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label {
+  font-weight: 700;
+  color: #2c2f24;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dbdfd0;
+  border-radius: 12px;
+  padding: 15px 16px;
+  font: inherit;
+  background: #fff;
+  color: #2c2f24;
+}
+
+.form-field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: 2px solid rgba(173, 52, 62, 0.2);
+  border-color: #ad343e;
+}
+
+.field-error {
+  min-height: 18px;
+  color: #ad343e;
+  font-size: 13px;
+}
+
+.checkout-status {
+  min-height: 22px;
+  margin: 0;
+  color: #737865;
+  font-weight: 600;
+}
+
+.checkout-status.error {
+  color: #ad343e;
+}
+
+.checkout-status.success {
+  color: #39734a;
+}
+
+.checkout-submit {
+  border: 0;
+  min-height: 58px;
+  border-radius: 999px;
+  color: #fff;
+  background: #ad343e;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checkout-submit:hover {
+  opacity: 0.92;
+}
+
+.checkout-summary dl {
+  margin: 0;
+}
+
+.checkout-summary dl > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  color: #737865;
+  border-bottom: 1px solid #dbdfd0;
+}
+
+.checkout-summary dt,
+.checkout-summary dd {
+  margin: 0;
+}
+
+.checkout-summary dd {
+  color: #2c2f24;
+  font-weight: 700;
+}
+
+.checkout-summary .summary-total {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid #dbdfd0;
+  border-bottom: 0;
+  color: #2c2f24;
+  font-size: 20px;
+}
+
+.checkout-items {
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.checkout-item-name {
+  font-weight: 600;
+}
+
+.checkout-item-meta {
+  color: #737865;
+  font-size: 14px;
+}
+
+.empty-checkout {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-checkout h1 {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.empty-checkout p {
+  color: #737865;
+}
+
+.empty-checkout a {
+  color: #ad343e;
+  font-weight: 700;
+}
+
+.confirmation {
+  text-align: center;
+  background: #fff;
+  border-radius: 16px;
+  padding: 60px 30px;
+  box-shadow: 0 3px 60px rgba(0, 0, 0, 0.08);
+}
+
+.confirmation h1 {
+  margin-top: 0;
+  color: #39734a;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+@media (max-width: 800px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
