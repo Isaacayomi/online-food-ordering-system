@@ -45,8 +45,8 @@
 
 - Checkout requires a signed-in user (else redirect to login) and a non-empty cart.
 - Delivery form (name, email, phone, address) validated with `Utils` (`isEmail`, `isEmpty`) — inline field errors and a status line.
-- On success: an order `{id, userId, items, subtotal, delivery, total, address, date, status: "Pending"}` is saved to `foodOrders`, the cart is cleared, a confirmation shows, then the user is redirected to My Orders.
-- My Orders lists that user's orders (newest first) with item summary, date, total and a "Pending" badge; an empty state offers a "Browse Menu" CTA.
+- On success: an order `{id, userId, items, subtotal, delivery, total, address, date, status: "Pending"}` is saved to `foodOrders`, the cart is cleared, and the user is redirected to My Orders with a success toast.
+- My Orders lists that user's orders (newest first) with item summary, date, total and a status badge; an empty state offers a "Browse Menu" CTA.
 
 **Files:** `pages/checkout.html`, `css/pages/checkout.css`, `js/checkout.js`, `pages/orders.html`, `css/pages/orders.css`, `js/orders.js`.
 
@@ -64,7 +64,7 @@
 
 **Branch:** `feature/home-page`
 
-- Hero over the CampusEats design image with a single "Explore Menu" CTA (checkout lives in the header's "Order Now").
+- Hero over the CampusEats design image with a single "Explore Menu" CTA.
 - Browse Our Menu category cards, a featured-dishes strip rendered live from `Menu.CATALOG` (image, ₦ price, auth-gated add-to-cart via `js/home.js`), an about block with CampusEats delivery info, delivery info list and campus-student testimonials.
 - Concept copy only — no blog or event-services sections.
 
@@ -78,6 +78,18 @@
 - Styled entirely in `css/pages/about.css` using the design tokens; no JS.
 
 **Files:** `pages/about.html`, `css/pages/about.css`.
+
+## 8. Admin dashboard — ✅ merged
+
+**Branch:** `feature/admin-dashboard`
+
+- Auth gains a `role` field, `Auth.isAdmin()`, and a seeded demo admin (`admin@campuseats.com` / `admin123`) alongside the existing demo student.
+- Header shows an admin-only "Admin" link (hidden for non-admin roles) via `admin-only-action` in `js/components.js`.
+- `pages/admin.html` + `js/admin.js`: gates non-admins to the login page, lists every order across all users (newest first) with the customer's name, and offers status filter tabs with counts.
+- Per-order status `<select>` updates `status` + `updatedAt` in `foodOrders`; statuses follow `Pending → Preparing → Out for Delivery → Delivered`, plus `Cancelled` (defined once in `js/admin.js` `ORDER_STATUSES`).
+- My Orders and the admin page both render colour-coded status badges (`order-status--<key>` modifiers in `css/pages/orders.css`).
+
+**Files:** `pages/admin.html`, `css/pages/admin.css`, `js/admin.js`, `js/auth.js`, `js/components.js`, `js/orders.js`, `css/pages/orders.css`.
 
 ---
 

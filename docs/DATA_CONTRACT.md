@@ -20,19 +20,40 @@ Shared shapes and event names so every page (menu, cart, checkout, auth, contact
 - Images are always stored as absolute URLs. Get a card's final URL via `Menu.url(item)`; if an image fails to load, `menu.js` swaps it to `Menu.PLACEHOLDER` (a neutral inline SVG) — a card never shows a broken/empty image.
 - Local dish photos are real food images (Wikimedia Commons / Unsplash); the old gradient placeholder JPGs are removed from the repo.
 
+## User shape (auth → `foodUsers`)
+
+```js
+{
+  id: "u-…",                  // string, unique
+  firstName: "…",
+  lastName: "…",
+  email: "…",                 // lowercase
+  role: "admin",              // optional; "admin" only for the seeded admin, absent for customers
+  salt: "…",                  // per-user salt for hashing
+  hash: "…",                  // salted SHA-256 hash of the password
+  createdAt: "…",             // ISO string
+  demo: true                  // optional; true for seeded accounts
+}
+```
+
+- `Auth.isAdmin()` returns `true` only when the signed-in user has `role: "admin"`.
+- A demo admin is seeded on first run (`admin@campuseats.com` / `admin123`), alongside the existing demo student.
+
 ## Storage keys (via `Storage` in `js/storage.js`)
 
-| Key | Contents | Owner |
-|---|---|---|
-| `foodUsers` | array of user accounts | auth |
-| `foodSession` | current signed-in user `{userId, email, name, signedInAt}` | auth |
-| `foodCart` | array of `{id, name, price, image, qty}` | cart |
-| `foodOrders` | array of orders | checkout/orders |
-| `foodMessages` | array of contact messages | contact |
-| `foodMenu` | legacy sessionStorage cache `{savedAt, live:[…]}` (feed retired — no longer written) | — |
-| `foodSearch-<query>` | sessionStorage cache of live search results (per query) | menu |
+| Key                  | Contents                                                                             | Owner           |
+| -------------------- | ------------------------------------------------------------------------------------ | --------------- |
+| `foodUsers`          | array of user accounts                                                               | auth            |
+| `foodSession`        | current signed-in user `{userId, email, name, signedInAt}`                           | auth            |
+| `foodCart`           | array of `{id, name, price, image, qty}`                                             | cart            |
+| `foodOrders`         | array of orders                                                                      | checkout/orders |
+| `foodMessages`       | array of contact messages                                                            | contact         |
+| `foodMenu`           | legacy sessionStorage cache `{savedAt, live:[…]}` (feed retired — no longer written) | —               |
+| `foodSearch-<query>` | sessionStorage cache of live search results (per query)                              | menu            |
 
 Use `Storage.get(key, fallback)` / `Storage.set(key, value)` — never touch `localStorage` directly.
+
+> **Scope:** every key lives in the browser's `localStorage` and never leaves the device. Multiple users/devices do not share data — intended for the HTML/CSS/JS assignment scope (see README "Known Limitations").
 
 ## Cart contract (`js/cart.js`)
 
@@ -47,7 +68,9 @@ Use `Storage.get(key, fallback)` / `Storage.set(key, value)` — never touch `lo
 - **Every mutation** persists to `foodCart` and dispatches a window event:
 
 ```js
-window.dispatchEvent(new CustomEvent("cartchange", { detail: { count, subtotal } }));
+window.dispatchEvent(
+  new CustomEvent("cartchange", { detail: { count, subtotal } }),
+);
 ```
 
 - Cart badge: header hook is `#cart-badge` (span). Listen to `cartchange` + on load to update it; hide when 0.
@@ -73,17 +96,22 @@ window.dispatchEvent(new CustomEvent("cartchange", { detail: { count, subtotal }
 
 ```js
 {
-  id: "…",                    // string, unique
+  id: "order-…",              // string, unique
   userId: "…",                // the user's id (auth)
   items: [{ id, name, price, image, qty }],  // from Cart.getItems()
   subtotal: 3200,             // Number, naira
   delivery: 500,              // flat ₦500; 0 when free
   total: 3700,                // subtotal + delivery
-  address: { name, email, phone, address },  // delivery details
-  date: 1739999999999,        // Number, Date.now()
-  status: "Pending"           // string badge
+  address: "…",               // delivery address string
+  date: "…",                  // ISO string, when the order was placed
+  status: "Pending",          // one of the ORDER_STATUSES below
+  updatedAt: 1739999999999    // Number, Date.now(); set by admin whenever the status changes
 }
 ```
+
+- The single source of statuses lives in `js/admin.js` (`ORDER_STATUSES`): `Pending → Preparing → Out for Delivery → Delivered`, plus `Cancelled`.
+- Checkout always creates orders with `status: "Pending"` (no `updatedAt`). The admin dashboard (`js/admin.js`) updates `status` + `updatedAt` and persists back to `foodOrders`.
+- Badge colouring: sentinel CSS modifiers `order-status--<status key>` (lowercased, spaces → hyphens) in `css/pages/orders.css` (used by both My Orders and the admin page).
 
 ## Contact message shape (contact → `foodMessages`)
 

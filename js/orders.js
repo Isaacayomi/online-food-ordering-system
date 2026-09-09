@@ -8,8 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const user = Auth.current();
 
+  const statusKey = (status) =>
+    String(status || "Pending")
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
   const orders = Storage.get("foodOrders", [])
-    .filter(order => order.userId === user.id)
+    .filter((order) => order.userId === user.id)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   main.innerHTML = `
@@ -24,13 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
         ${
           orders.length
             ? `<div class="orders-list">
-                ${orders.map(order => {
-                  const date = new Date(order.date).toLocaleString("en-NG", {
-                    dateStyle: "medium",
-                    timeStyle: "short"
-                  });
+                ${orders
+                  .map((order) => {
+                    const date = new Date(order.date).toLocaleString("en-NG", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    });
 
-                  return `
+                    return `
                     <article class="order-card">
                       <div class="order-header">
                         <div>
@@ -38,13 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
                           <div class="order-date">${Utils.escapeHTML(date)}</div>
                         </div>
 
-                        <span class="order-status">
+                        <span class="order-status order-status--${statusKey(order.status)}">
                           ${Utils.escapeHTML(order.status || "Pending")}
                         </span>
                       </div>
 
                       <ul class="order-items">
-                        ${order.items.map(item => `
+                        ${order.items
+                          .map(
+                            (item) => `
                           <li class="order-item">
                             <div class="order-item-info">
                               <span class="order-item-name">
@@ -59,7 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
                               ${Utils.money(Number(item.price) * item.qty)}
                             </strong>
                           </li>
-                        `).join("")}
+                        `,
+                          )
+                          .join("")}
                       </ul>
 
                       <div class="order-total">
@@ -68,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
                       </div>
                     </article>
                   `;
-                }).join("")}
+                  })
+                  .join("")}
               </div>`
             : `
               <div class="empty-orders">
@@ -84,4 +95,29 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </section>
   `;
+
+  let toastEl = null;
+  let toastTimer = null;
+
+  function showToast(message) {
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.className = "toast";
+      toastEl.setAttribute("role", "status");
+      toastEl.setAttribute("aria-live", "polite");
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = message;
+    toastEl.classList.add("is-visible");
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(
+      () => toastEl.classList.remove("is-visible"),
+      4000,
+    );
+  }
+
+  if (Storage.get("ceOrderPlaced", false)) {
+    Storage.remove("ceOrderPlaced");
+    showToast("Your order has been placed successfully!");
+  }
 });

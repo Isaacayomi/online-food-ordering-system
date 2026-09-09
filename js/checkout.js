@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2>Order Summary</h2>
 
             <ul class="checkout-items">
-              ${items.map(item => `
+              ${items
+                .map(
+                  (item) => `
                 <li class="checkout-item">
                   <div>
                     <div class="checkout-item-name">
@@ -101,7 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                   <strong>${Utils.money(Number(item.price) * item.qty)}</strong>
                 </li>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </ul>
 
             <dl>
@@ -129,21 +133,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.querySelector("#checkout-form");
 
-const phoneInput = document.querySelector("#phone");
+  const phoneInput = document.querySelector("#phone");
 
-phoneInput.addEventListener("input", () => {
-  const hasLetters = /[A-Za-z]/.test(phoneInput.value);
+  phoneInput.addEventListener("input", () => {
+    const hasLetters = /[A-Za-z]/.test(phoneInput.value);
 
-  phoneInput.value = phoneInput.value.replace(/\D/g, "");
+    phoneInput.value = phoneInput.value.replace(/\D/g, "");
 
-  const phoneError = document.querySelector("#phone-error");
+    const phoneError = document.querySelector("#phone-error");
 
-  if (hasLetters) {
-    phoneError.textContent = "Phone number can only contain numbers.";
-  } else {
-    phoneError.textContent = "";
-  }
-});
+    if (hasLetters) {
+      phoneError.textContent = "Phone number can only contain numbers.";
+    } else {
+      phoneError.textContent = "";
+    }
+  });
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -192,13 +196,13 @@ phoneInput.addEventListener("input", () => {
     const order = {
       id: `order-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
       userId: user.id,
-      items: items.map(item => ({ ...item })),
+      items: items.map((item) => ({ ...item })),
       subtotal: totals.subtotal,
       delivery: totals.delivery,
       total: totals.total,
       address,
       date: new Date().toISOString(),
-      status: "Pending"
+      status: "Pending",
     };
 
     const orders = Storage.get("foodOrders", []);
@@ -207,20 +211,8 @@ phoneInput.addEventListener("input", () => {
 
     Cart.clear();
 
-    main.innerHTML = `
-      <section class="checkout-page">
-        <div class="checkout-wrap">
-          <div class="confirmation">
-            <h1>Order Confirmed! 🎉</h1>
-            <p>Your order has been placed successfully.</p>
-            <p>Redirecting you to My Orders...</p>
-          </div>
-        </div>
-      </section>
-    `;
+    Storage.set("ceOrderPlaced", true);
 
-    setTimeout(() => {
-      window.location.href = "orders.html";
-    }, 1000);
+    window.location.href = "orders.html";
   });
 });
