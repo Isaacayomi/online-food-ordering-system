@@ -23,10 +23,14 @@
   text-align: center;
 }
 .hero-content {
-  position: relative;
+  position: absolute;
   z-index: 1;
+  left: 42.6%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(25.2%, 30rem);
   max-width: 660px;
-  padding: 88px 0;
+  padding: 0;
 }
 .hero-content h1 {
   margin: 0 0 23px;
@@ -429,6 +433,14 @@
   .bistro-hero {
     min-height: 530px;
   }
+  .hero-content {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: auto;
+    padding: 60px 0;
+  }
 }
 @media (max-width: 600px) {
   .bistro-wrap {
@@ -438,7 +450,12 @@
     min-height: 520px;
   }
   .hero-content {
-    padding: 65px 0;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: auto;
+    padding: 40px 0;
   }
   .hero-content h1 {
     font-size: 56px;
