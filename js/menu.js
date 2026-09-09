@@ -203,20 +203,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   render();
-
-  async function loadLive() {
-    try {
-      const live = await Menu.loadLive();
-      if (live.length) {
-        all = [...Menu.CATALOG, ...live];
-        render();
-      }
-    } catch {
-      status.hidden = false;
-      status.textContent = "Live dishes are unavailable right now — the Nigerian menu above is ready to order.";
-      loadMoreBtn.hidden = true;
-    }
-  }
-
-  loadLive();
 });

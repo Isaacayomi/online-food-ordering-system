@@ -2,7 +2,7 @@
 
 Shared shapes and event names so every page (menu, cart, checkout, auth, contact) builds against the same models — no coupling to any one page or teammate's branch.
 
-## Catalog item shape (single source: `data.js` `Menu.CATALOG` + live items)
+## Catalog item shape (single source: `data.js` `Menu.CATALOG`; live items only ever come from search)
 
 ```js
 {
@@ -29,7 +29,7 @@ Shared shapes and event names so every page (menu, cart, checkout, auth, contact
 | `foodCart` | array of `{id, name, price, image, qty}` | cart |
 | `foodOrders` | array of orders | checkout/orders |
 | `foodMessages` | array of contact messages | contact |
-| `foodMenu` | sessionStorage cache `{savedAt, live:[…]}` | menu |
+| `foodMenu` | legacy sessionStorage cache `{savedAt, live:[…]}` (feed retired — no longer written) | — |
 | `foodSearch-<query>` | sessionStorage cache of live search results (per query) | menu |
 
 Use `Storage.get(key, fallback)` / `Storage.set(key, value)` — never touch `localStorage` directly.
@@ -56,7 +56,7 @@ window.dispatchEvent(new CustomEvent("cartchange", { detail: { count, subtotal }
 
 - `Menu.CATALOG` — the 18-dish local Nigerian catalogue (source of truth for names/prices).
 - `Menu.PRICE_TABLET` — per-category price fallback; auto-priced at load/augment.
-- `Menu.loadLive()` — fetches TheMealDB Chicken/Seafood/Dessert (3 each), caches in `foodMenu`, resolves offline-safe.
+- `Menu.loadLive()` — **retired**: the auto-loaded feed was removed from the menu; the function is retained but is no longer called.
 - `Menu.search(query)` — TheMealDB `search.php?s=` for up to 6 results with auto-curated prices, results flagged `searched: true`, cached per query (`foodSearch-<query>`); `[]` on no hit/error.
 - `Menu.url(item)` — final image URL; `Menu.PLACEHOLDER` — neutral SVG for broken images.
 

@@ -2,7 +2,7 @@
 
 > Group 8 project for SEN106/SEN216: Introduction to Web Technologies.
 
-A simple web-based food ordering platform where users can view menus, add meals to a cart, and place orders - built with pure HTML, CSS and JavaScript, enriched with a live dish feed from the free [TheMealDB](https://www.themealdb.com) API.
+A simple web-based food ordering platform where users can view menus, add meals to a cart, and place orders - built with pure HTML, CSS and JavaScript, with live dish search from the free [TheMealDB](https://www.themealdb.com) API.
 
 > **Status:** Complete. Every page is shipped and merged — landing page, menu, cart, checkout, My Orders, about and contact — and the app is deployed to Vercel at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app).
 
@@ -28,7 +28,7 @@ A simple web-based food ordering platform where users can view menus, add meals 
 
 CampusEats is a lightweight online food ordering platform designed for university students. The application lets users browse a menu of meals and drinks partitioned by category, add items to a cart, adjust quantities, and place orders through a simple checkout flow. Order history is stored so students can track their past orders.
 
-The application is a pure front-end implementation: data is held in JavaScript and persisted in the browser using `localStorage`, which keeps the project easy to run, demo and deploy without a dedicated server. On top of the curated local menu, a **live feed** pulls international dishes from TheMealDB, and search falls back to that API when a dish isn't in the local catalogue.
+The application is a pure front-end implementation: data is held in JavaScript and persisted in the browser using `localStorage`, which keeps the project easy to run, demo and deploy without a dedicated server. The menu shows the curated 18-dish local catalogue; when a search matches nothing locally, it falls back to TheMealDB and brings back live results.
 
 ## Problem Statement
 
@@ -66,7 +66,7 @@ A simple, student-focused web ordering platform solves this by letting users bro
 ### Implemented
 
 - **Local Nigerian menu** — 18 dishes across Starters, Mains, Drinks and Desserts, each with a real food photo, description and price.
-- **Live dish feed** — 9 international dishes pulled from TheMealDB (Chicken, Seafood, Dessert) shown alongside the local menu; images and no-result states degrade gracefully (offline-safe placeholder).
+- **Curated local menu** — 18 Nigerian dishes render on load (the auto-loaded TheMealDB feed was retired); images and no-result states degrade gracefully (offline-safe placeholder).
 - **Menu search & filters** — category chips plus instant search; when local results are empty, search queries TheMealDB and renders up to 6 live results tagged "Live results for …" (debounced, with a loading spinner).
 - **Pagination** — "Load More" reveals 9 cards at a time until the list ends.
 - **Authentication** — register, sign in and sign out with client-side validation (WebCrypto salted SHA-256 hashes); a demo account is seeded on first run. Signed-in users are redirected away from the auth pages; the header switches to "Hi, name / Sign out".
@@ -94,7 +94,7 @@ A simple, student-focused web ordering platform solves this by letting users bro
 | --- | --- |
 | HTML | Semantic elements (`header`, `nav`, `main`, `footer`, `section`, `article`) used across all pages. |
 | CSS | Component stylesheet with a consistent design system (tokens, responsive breakpoints, mobile navigation, animations). |
-| JavaScript | Dynamic menu rendering, live API feed + search, cart logic, form validation, authentication, shared component injection. |
+| JavaScript | Dynamic menu rendering, live menu search fallback, cart logic, form validation, authentication, shared component injection. |
 | Git/GitHub | Feature-branch workflow: PRs into `dev`, then an approved `dev → main` PR. See CONTRIBUTING.md. |
 | Web Hosting | Deployed on **Vercel** (static hosting) at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app); auto-deploys on pushes to `main`. See docs/DEPLOYMENT.md. |
 | Usability & Accessibility | Keyboard-friendly, labelled forms, `aria` attributes, focus states, `aria-live` status/toasts, responsive across breakpoints. |
@@ -118,9 +118,9 @@ A simple, student-focused web ordering platform solves this by letting users bro
 
 ## Live API
 
-The live feed and search use the free [TheMealDB](https://www.themealdb.com) API (no key):
+Live search uses the free [TheMealDB](https://www.themealdb.com) API (no key):
 
-- `filter.php?c=Chicken|Seafood|Dessert` — the 9-dish live section, cached in `sessionStorage` for the session.
+- No live feed is auto-loaded — the menu shows the curated 18-dish local catalogue.
 - `search.php?s=<query>` — on-demand fallback when a search matches nothing locally (up to 6 results, prices auto-curated from the local `PRICE_TABLET`). Try searching "pizza".
 
 Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure falls back to a neutral placeholder so a card never shows a broken or empty image.
@@ -134,7 +134,7 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 ├── register.html           # Create account (root-level)
 ├── 404.html                # Custom 404 page for invalid routes
 ├── pages/                  # One HTML file per page
-│   ├── menu.html           # Menu with categories, search, live feed + pagination
+│   ├── menu.html           # Menu with categories, search + pagination
 │   ├── cart.html           # Cart page with steppers and live totals
 │   ├── checkout.html       # Delivery details + place order
 │   ├── orders.html         # Order history
@@ -146,7 +146,7 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 │   └── pages/              # One CSS file per page
 ├── js/
 │   ├── components.js       # Reusable header/footer injection, auth state, cart badge
-│   ├── data.js             # Menu data, price tablet, live feed + search API layer
+│   ├── data.js             # Menu data, price tablet, live search API layer
 │   ├── menu.js             # Menu rendering, filters, pagination, live search, auth-gated cart
 │   ├── cart.js             # Cart model + persistence
 │   ├── auth.js             # Registration, login, sessions, demo seeding

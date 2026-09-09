@@ -21,6 +21,7 @@
 .auth-welcome { color: var(--ink); font-size: 15px; font-weight: 600; }
 .auth-button { border: 0; border-radius: 34px; padding: 8px 14px; color: var(--accent); background: transparent; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
 .auth-button:hover { background: var(--sage); }
+.auth-state--mobile { display: none; }
 
 .form-status { margin: -8px 0 0; color: var(--accent); font-size: 15px; font-weight: 600; text-align: center; line-height: 22px; }
 .form-status.is-success { color: #2f7d4f; }
@@ -53,6 +54,9 @@
   .table-button { display: none; }
   .nav-actions { gap: 8px; }
   .auth-state { display: none; }
+  .auth-state--mobile { display: inline-flex; gap: 8px; }
+  .auth-state--mobile .auth-link, .auth-state--mobile .auth-button { padding: 12px 18px; font-size: 20px; }
+  .auth-state--mobile .auth-welcome { font-size: 20px; }
   .nav-links { display: none; width: 100%; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0 48px; }
   .nav-links.is-open { display: flex; }
   .site-header.is-menu-open { display: flex; position: fixed; inset: 0; overflow-y: auto; flex-direction: column; background: rgba(249, 249, 247, 0.85); border-bottom: 0; }
