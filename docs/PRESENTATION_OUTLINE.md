@@ -22,7 +22,7 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 - Live search: unknown dishes are pulled from the API and rendered as tagged results
 - Cart and quantity management (auth-gated add-to-cart with sign-in toast)
 - Checkout flow and order history
-- Authentication (register / login / logout)
+- Authentication (register / login / logout) plus an admin dashboard for managing order statuses
 
 ## 6. System Architecture and Design (1 slide)
 
@@ -34,6 +34,7 @@ Group 8 - Online Food Ordering System. One speaker per major section; keep total
 
 - Show: home page (hero + featured dishes), browse + filter menu, search (try "pizza") for live results, add to cart, checkout, view orders
 - Show: signed-out add-to-cart shows the sign-in toast; login with demo account `demo@student.com` / `demo123`
+- Show: sign in as admin (`admin@campuseats.com` / `admin123`), update an order's status, and see it reflected in My Orders
 - Show: responsive mobile view + empty/error states
 
 ## 8. Implementation Highlights (1-2 slides)

@@ -2,7 +2,7 @@
 
 Run through these before the defence demo and record results in the table. Also verify the app on 2+ browsers (e.g. Chrome, Firefox) and a phone-sized window.
 
-> Status: **all pages are implemented and merged** (cart page, checkout, My Orders, contact validation, home and about). Run the full checklist below before the defence demo and record results.
+> Status: **all pages are implemented and merged** (cart page, checkout, My Orders, contact validation, home, about and admin dashboard). Run the full checklist below before the defence demo and record results.
 
 ## Setup
 
@@ -47,8 +47,19 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Empty cart cannot reach checkout
 - [ ] Checkout form validates: name, valid email, valid phone, address
 - [ ] Invalid fields show inline errors and focus the first bad field
-- [ ] Placing an order clears the cart and shows a success confirmation; order lands in My Orders as "Pending"
+- [ ] Placing an order clears the cart and redirects to My Orders with a success toast; order lands in My Orders as "Pending"
 - [ ] Order history persists after refresh; empty state shows "No orders yet"
+- [ ] Status badges render in the correct colour per status (pending amber / preparing blue / out-for-delivery purple / delivered green / cancelled red)
+
+## Admin dashboard
+
+- [ ] Header shows an "Admin" link only when signed in as the demo admin
+- [ ] Non-admins visiting `/pages/admin` are redirected to login
+- [ ] Dashboard lists every order in the system with the customer's name
+- [ ] Status tabs filter correctly and show per-status counts
+- [ ] Changing an order's status persists after refresh
+- [ ] Updated status flows through to the customer's My Orders page
+- [ ] Admin account works: `admin@campuseats.com` / `admin123`
 
 ## Auth
 
@@ -72,6 +83,6 @@ Run through these before the defence demo and record results in the table. Also 
 ## Records (fill in during QA)
 
 | Test date | Tester | Browser/device | Result (Pass/Fail) | Issues found |
-| --- | --- | --- | --- | --- |
-| | | | | |
-| | | | | |
+| --------- | ------ | -------------- | ------------------ | ------------ |
+|           |        |                |                    |              |
+|           |        |                |                    |              |

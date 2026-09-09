@@ -76,7 +76,8 @@ A simple, student-focused web ordering platform solves this by letting users bro
 - **Logo favicon** — the CampusEats logo mark (also in the navbar) serves as the site favicon.
 - **Landing page** — a hero over a real food photo with a single clear CTA, category shortcuts, a featured-dishes strip rendered live from the menu (with auth-gated add-to-cart), an about block, delivery info and campus testimonials.
 - **Cart page** — the real cart with quantity steppers, line totals, removal, "Clear cart", live subtotal/₦500-delivery/total, an empty state and a checkout action that is disabled until items exist.
-- **Checkout & My Orders** — a validated delivery-details form that creates a `Pending` order, and an order-history page (newest first) with an empty state.
+- **Checkout & My Orders** — a validated delivery-details form that creates a `Pending` order, and an order-history page (newest first) with an empty state and status-coloured badges.
+- **Admin dashboard** — a seeded admin account (`admin@campuseats.com` / `admin123`) gets an "Admin" nav link and a dashboard listing every order, with per-status filter tabs and a status control (Pending → Preparing → Out for Delivery → Delivered / Cancelled) that updates orders in real time.
 - **About page** — a platform narrative (what CampusEats is and why it was built) with a menu/account call-to-action.
 - **Contact validation** — the contact form validates name/email/subject/message, saves messages to `foodMessages` and shows success feedback.
 
@@ -90,29 +91,29 @@ A simple, student-focused web ordering platform solves this by letting users bro
 
 ## Minimum Project Requirements Coverage
 
-| Requirement | How CampusEats meets it |
-| --- | --- |
-| HTML | Semantic elements (`header`, `nav`, `main`, `footer`, `section`, `article`) used across all pages. |
-| CSS | Component stylesheet with a consistent design system (tokens, responsive breakpoints, mobile navigation, animations). |
-| JavaScript | Dynamic menu rendering, live menu search fallback, cart logic, form validation, authentication, shared component injection. |
-| Git/GitHub | Feature-branch workflow: PRs into `dev`, then an approved `dev → main` PR. See CONTRIBUTING.md. |
-| Web Hosting | Deployed on **Vercel** (static hosting) at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app); auto-deploys on pushes to `main`. See docs/DEPLOYMENT.md. |
-| Usability & Accessibility | Keyboard-friendly, labelled forms, `aria` attributes, focus states, `aria-live` status/toasts, responsive across breakpoints. |
-| Security Awareness | Escaping of user-generated content on render, client-side validation, salted SHA-256 password hashes, and a documented review of client-side-only auth limits. |
-| Documentation | This README, plus docs/DATA_CONTRACT.md, docs/TASKS.md, docs/QA_CHECKLIST.md, docs/PRESENTATION_OUTLINE.md and docs/DEPLOYMENT.md. |
-| Presentation | Slides and live demonstration prepared for the final defence. |
+| Requirement               | How CampusEats meets it                                                                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HTML                      | Semantic elements (`header`, `nav`, `main`, `footer`, `section`, `article`) used across all pages.                                                                           |
+| CSS                       | Component stylesheet with a consistent design system (tokens, responsive breakpoints, mobile navigation, animations).                                                        |
+| JavaScript                | Dynamic menu rendering, live menu search fallback, cart logic, form validation, authentication, shared component injection.                                                  |
+| Git/GitHub                | Feature-branch workflow: PRs into `dev`, then an approved `dev → main` PR. See CONTRIBUTING.md.                                                                              |
+| Web Hosting               | Deployed on **Vercel** (static hosting) at [campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app); auto-deploys on pushes to `main`. See docs/DEPLOYMENT.md. |
+| Usability & Accessibility | Keyboard-friendly, labelled forms, `aria` attributes, focus states, `aria-live` status/toasts, responsive across breakpoints.                                                |
+| Security Awareness        | Escaping of user-generated content on render, client-side validation, salted SHA-256 password hashes, and a documented review of client-side-only auth limits.               |
+| Documentation             | This README, plus docs/DATA_CONTRACT.md, docs/TASKS.md, docs/QA_CHECKLIST.md, docs/PRESENTATION_OUTLINE.md and docs/DEPLOYMENT.md.                                           |
+| Presentation              | Slides and live demonstration prepared for the final defence.                                                                                                                |
 
 ## Technology Stack
 
-| Technology | Purpose |
-| --- | --- |
-| HTML5 | Page structure and semantic markup. |
-| CSS3 | Styling, layout, responsive design and design tokens (CSS custom properties). |
-| JavaScript (vanilla, ES6+) | All interactivity: rendering, live API calls, cart, validation, auth, shared components. |
-| TheMealDB API | External live dish feed + search fallback (no API key required). |
-| localStorage / sessionStorage | Persistence for users, session, cart, orders, messages and the menu cache. |
-| Git & GitHub | Version control and collaboration. |
-| Vercel | Deployment and hosting of the static site (pending final merge). |
+| Technology                    | Purpose                                                                                  |
+| ----------------------------- | ---------------------------------------------------------------------------------------- |
+| HTML5                         | Page structure and semantic markup.                                                      |
+| CSS3                          | Styling, layout, responsive design and design tokens (CSS custom properties).            |
+| JavaScript (vanilla, ES6+)    | All interactivity: rendering, live API calls, cart, validation, auth, shared components. |
+| TheMealDB API                 | External live dish feed + search fallback (no API key required).                         |
+| localStorage / sessionStorage | Persistence for users, session, cart, orders, messages and the menu cache.               |
+| Git & GitHub                  | Version control and collaboration.                                                       |
+| Vercel                        | Deployment and hosting of the static site (pending final merge).                         |
 
 **Why vanilla HTML/CSS/JS?** The project brief asks us to demonstrate the core web technologies taught in SEN106/SEN216. Avoiding a framework lets the team show clear understanding of each layer, and keeps the project simple to run and host.
 
@@ -138,6 +139,7 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 │   ├── cart.html           # Cart page with steppers and live totals
 │   ├── checkout.html       # Delivery details + place order
 │   ├── orders.html         # Order history
+│   ├── admin.html          # Admin dashboard (status management)
 │   ├── about.html          # About the platform
 │   └── contact.html        # Contact form + details (validated)
 ├── css/
@@ -149,7 +151,9 @@ Dish images come from TheMealDB CDN, Unsplash and Wikimedia Commons; any failure
 │   ├── data.js             # Menu data, price tablet, live search API layer
 │   ├── menu.js             # Menu rendering, filters, pagination, live search, auth-gated cart
 │   ├── cart.js             # Cart model + persistence
-│   ├── auth.js             # Registration, login, sessions, demo seeding
+│   ├── auth.js             # Registration, login, sessions, demo + admin seeding
+│   ├── orders.js           # Order-history rendering + status badges
+│   ├── admin.js            # Admin dashboard rendering + status management
 │   ├── storage.js          # localStorage helpers
 │   └── utils.js            # Validation, escaping, money formatting
 ├── assets/                 # logo-mark.svg (navbar + favicon), images
@@ -197,14 +201,20 @@ The project is a static site; no dependencies or build step are required.
 
 3. Open the printed URL in a browser.
 
-### Demo account
+### Demo accounts
 
-A demo account is seeded automatically on first run:
+Two accounts are seeded automatically on first run:
 
-```
-Email:    demo@student.com
-Password: demo123
-```
+- **Student (customer)**
+  ```
+  Email:    demo@student.com
+  Password: demo123
+  ```
+- **Admin** — gets an "Admin" link in the header and a dashboard to manage order statuses
+  ```
+  Email:    admin@campuseats.com
+  Password: admin123
+  ```
 
 ## Deployment
 
@@ -217,6 +227,16 @@ At a glance:
 3. Vercel auto-deploys on every push to `main`; no manual step is needed after a `dev → main` merge.
 
 > Note: the app must be served over HTTP/HTTPS (as Vercel provides) - a plain `file://` open will not resolve the shared scripts correctly. `localStorage` is scoped per origin, so the local `localhost` copy and the hosted URL keep separate carts/accounts, which is expected.
+
+## Known Limitations
+
+Because the project is scoped to pure HTML, CSS and JavaScript, all data lives in the browser's `localStorage` and never leaves the device:
+
+- Carts, accounts, orders and messages do not sync across devices or browsers.
+- The admin dashboard only sees orders placed in the **same browser**. For the demo, place an order first, then sign in as the admin (`admin@campuseats.com` / `admin123`) in that same browser to update its status.
+- Passwords are hashed client-side with salted SHA-256; this demonstrates security awareness but is not a substitute for server-side auth.
+
+These are accepted for the assignment scope. The path to shared, multi-user data is a backend (e.g. Firebase/Supabase or a small Node server) on top of the existing front-end.
 
 ## Git Workflow and Collaboration
 

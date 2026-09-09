@@ -8,17 +8,17 @@ This doc records how the deployment is set up, what was fixed along the way, and
 
 ## Live configuration
 
-| Item | Value |
-| --- | --- |
-| Live URL | `https://campus-eats-group8.vercel.app` |
-| Source | This repo, **`main`** branch |
-| Root directory | `./` (repo root) |
-| Framework preset | **Other** (static files; no build step) |
-| Build command | None / empty |
-| Install command | None |
-| Environment variables | None (the `EXAMPLE_NAME` placeholder import env was removed) |
-| Deploy trigger | Automatic — every push to `main` |
-| Demo account | `demo@student.com` / `demo123` (auto-seeded on first visit) |
+| Item                  | Value                                                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Live URL              | `https://campus-eats-group8.vercel.app`                                                                             |
+| Source                | This repo, **`main`** branch                                                                                        |
+| Root directory        | `./` (repo root)                                                                                                    |
+| Framework preset      | **Other** (static files; no build step)                                                                             |
+| Build command         | None / empty                                                                                                        |
+| Install command       | None                                                                                                                |
+| Environment variables | None (the `EXAMPLE_NAME` placeholder import env was removed)                                                        |
+| Deploy trigger        | Automatic — every push to `main`                                                                                    |
+| Demo accounts         | Student `demo@student.com` / `demo123`; Admin `admin@campuseats.com` / `admin123` (both auto-seeded on first visit) |
 
 ## `vercel.json`
 
@@ -61,6 +61,6 @@ No manual step is needed — Vercel auto-deploys on pushes to `main`. If you eve
 
 Share the live link plus:
 
-- Demo account: `demo@student.com` / `demo123`
+- Demo accounts: student `demo@student.com` / `demo123`; admin `admin@campuseats.com` / `admin123`
 - Bug reports via the GitHub Issues bug template (`.github/ISSUE_TEMPLATE/bug_report.md`)
 - Known limits (any intentionally-stubbed feature) so tester reports focus on real bugs.
