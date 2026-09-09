@@ -61,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="form-field">
                 <label for="phone">Phone Number</label>
                 <input id="phone" name="phone" type="tel"
-                  placeholder="Enter your phone number">
+  inputmode="numeric"
+  pattern="[0-9]*"
+  maxlength="15"
+  placeholder="Enter your phone number">
                 <small class="field-error" id="phone-error"></small>
               </div>
 
@@ -125,6 +128,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.querySelector("#checkout-form");
 
+const phoneInput = document.querySelector("#phone");
+
+phoneInput.addEventListener("input", () => {
+  const hasLetters = /[A-Za-z]/.test(phoneInput.value);
+
+  phoneInput.value = phoneInput.value.replace(/\D/g, "");
+
+  const phoneError = document.querySelector("#phone-error");
+
+  if (hasLetters) {
+    phoneError.textContent = "Phone number can only contain numbers.";
+  } else {
+    phoneError.textContent = "";
+  }
+});
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
