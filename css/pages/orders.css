@@ -1,0 +1,143 @@
+.orders-page {
+  min-height: 70vh;
+  padding: 70px 24px 120px;
+  background: #f9f9f7;
+}
+
+.orders-wrap {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.orders-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.orders-hero h1 {
+  margin: 0;
+  color: #2c2f24;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(42px, 6vw, 64px);
+}
+
+.orders-hero p {
+  color: #737865;
+}
+
+.orders-list {
+  display: grid;
+  gap: 22px;
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 3px 60px rgba(0, 0, 0, 0.08);
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #dbdfd0;
+}
+
+.order-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.order-date {
+  color: #737865;
+  font-size: 14px;
+}
+
+.order-status {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  color: #8a5b00;
+  background: #fff3cd;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.order-items {
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-item-name {
+  font-weight: 700;
+}
+
+.order-item-meta {
+  color: #737865;
+  font-size: 14px;
+}
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #dbdfd0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.empty-orders {
+  background: #fff;
+  border-radius: 16px;
+  padding: 70px 24px;
+  text-align: center;
+  box-shadow: 0 3px 60px rgba(0, 0, 0, 0.08);
+}
+
+.empty-orders h2 {
+  margin-top: 0;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.empty-orders p {
+  color: #737865;
+}
+
+.browse-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: 999px;
+  color: #fff;
+  background: #ad343e;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+@media (max-width: 650px) {
+  .order-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
