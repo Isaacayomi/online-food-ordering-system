@@ -2,12 +2,12 @@
 
 Run through these before the defence demo and record results in the table. Also verify the app on 2+ browsers (e.g. Chrome, Firefox) and a phone-sized window.
 
-> Status: the **cart page, checkout, My Orders, contact validation and home page** depend on open streams (see `docs/TASKS.md`). Their checklist items below are for the full build; the rest is testable now.
+> Status: **all pages are implemented and merged** (cart page, checkout, My Orders, contact validation, home and about). Run the full checklist below before the defence demo and record results.
 
 ## Setup
 
 - [ ] `git clone` works; `node server.js` (or `PORT=8080 node server.js`, or `python3 -m http.server 8000`) serves the site
-- [ ] Deployed URL loads (Vercel) once deployed — see `docs/DEPLOYMENT.md`
+- [ ] Deployed URL loads (Vercel): https://campus-eats-group8.vercel.app
 - [ ] No console errors on any page
 
 ## Header / Footer (all pages)
@@ -32,7 +32,7 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] **Signed in:** clicking Add to Cart adds the item, flashes "Added ✓", and the header badge increments
 - [ ] Live-search results can be added to cart (signed in)
 
-## Cart (once the cart-page stream lands)
+## Cart
 
 - [ ] Items added appear in the cart with correct quantities
 - [ ] Quantity +/- updates line total and overall total
@@ -41,7 +41,7 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Cart persists after page refresh
 - [ ] An empty cart cannot reach checkout
 
-## Checkout & Orders (once the checkout stream lands)
+## Checkout & Orders
 
 - [ ] Signed-out users are sent to login
 - [ ] Empty cart cannot reach checkout
@@ -57,7 +57,7 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Logout clears the session; header returns to signed-out state
 - [ ] Demo account works: `demo@student.com` / `demo123`
 
-## Contact (once the contact-validation stream lands)
+## Contact
 
 - [ ] Bad email + short message are blocked with visible per-field errors
 - [ ] Valid submit saves to `foodMessages` and shows success; form clears

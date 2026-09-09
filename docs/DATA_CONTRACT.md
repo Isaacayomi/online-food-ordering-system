@@ -1,6 +1,6 @@
 # Data Contract
 
-Shared shapes and event names so every stream (menu, cart, checkout, auth) builds against the same API — no coupling to any one page or teammate's branch.
+Shared shapes and event names so every page (menu, cart, checkout, auth, contact) builds against the same models — no coupling to any one page or teammate's branch.
 
 ## Catalog item shape (single source: `data.js` `Menu.CATALOG` + live items)
 
@@ -68,3 +68,32 @@ window.dispatchEvent(new CustomEvent("cartchange", { detail: { count, subtotal }
 ## Money
 
 - Display via `Utils.money(value)` → `₦1,200` (en-NG grouping). Store numbers, never formatted strings.
+
+## Order shape (checkout → `foodOrders`)
+
+```js
+{
+  id: "…",                    // string, unique
+  userId: "…",                // the user's id (auth)
+  items: [{ id, name, price, image, qty }],  // from Cart.getItems()
+  subtotal: 3200,             // Number, naira
+  delivery: 500,              // flat ₦500; 0 when free
+  total: 3700,                // subtotal + delivery
+  address: { name, email, phone, address },  // delivery details
+  date: 1739999999999,        // Number, Date.now()
+  status: "Pending"           // string badge
+}
+```
+
+## Contact message shape (contact → `foodMessages`)
+
+```js
+{
+  id: "…",            // string, unique
+  name: "…",
+  email: "…",
+  subject: "…",       // optional
+  message: "…",
+  date: 1739999999999 // Number, Date.now()
+}
+```

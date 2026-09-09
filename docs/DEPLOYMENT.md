@@ -1,50 +1,28 @@
-# Deployment & Pre-Launch Checklist (Vercel)
+# Deployment Record (Vercel)
 
-This doc captures the steps to ship a public test build once every stream is
-merged. **Deploying is explicitly deferred** until the remaining streams (cart,
-contact, checkout/orders, home) have completed and merged their pages.
+The app is **live**: [https://campus-eats-group8.vercel.app](https://campus-eats-group8.vercel.app)
 
----
-
-## 1. Merge everything to `main` first
-
-`origin/main` is the protected trunk. Stream work lands in `dev` first (each via
-its own PR, see `CONTRIBUTING.md`); `main` is only updated from `dev` once
-everything is merged. **Do not deploy before `main` is the full app.**
-
-Suggested merge order (each via its own PR):
-
-| Order | Branch | Content | Notes |
-| --- | --- | --- | --- |
-| 1 | `feat/live-menu-auth` | Menu + live TheMealDB feed/search, auth, cart model, header/badge, real photos | Base integration — merge first |
-| 2 | `feature/menu-page` | Earlier menu work | Conflicts expected in `js/menu.js`, `js/data.js`, `pages/menu.html`, `css/pages/menu.css` |
-| 3 | `feature/contact-page` | Contact form | Conflicts in `pages/contact.html`, `css/pages/contact.css`, maybe `js/components.js` |
-| 4 | cart / checkout / orders / about (as they're finished) | — | Duplicate ownership of `pages/cart.html`, `pages/checkout.html`, `pages/orders.html`, `pages/about.html` |
-
-### Known merge conflict areas
-- `js/data.js`, `js/menu.js`, `pages/menu.html`, `css/pages/menu.css`
-  — the menu streams all touched these. Keep the **live menu + search** version.
-- `login.html` + `register.html` live at the **repo root** (current branch).
-  Teammate branches may still reference `pages/login.html` / `pages/register.html`.
-  After merging, grep for stale links:
-  `grep -rn "pages/login.html|pages/register.html" --include=*.html --include=*.js`.
-- Shared header is injected by `js/components.js`. Any page that hardcodes its own
-  header/nav should be reduced to the shared one. Pages must load
-  `storage.js, utils.js, data.js, cart.js, auth.js, components.js` in that order.
-- `vercel.json` exists on multiple branches — see config fix below.
-
-### Rules for the merge review
-- Every page must load the shared header + footer (`components.js`).
-- Add-to-cart is **auth-gated** in `js/menu.js` — do not merge changes that
-  re-add unconditional add-to-cart.
-- Keep `[hidden] { display: none !important; }` in `css/base.css` (line 5).
+This doc records how the deployment is set up, what was fixed along the way, and how to redeploy — so it never needs to be planned again.
 
 ---
 
-## 2. Fix `vercel.json` for a multi-page static site
+## Live configuration
 
-The current config rewrites **every** route to the 404 page, which breaks all
-real pages on Vercel. Replace its contents with:
+| Item | Value |
+| --- | --- |
+| Live URL | `https://campus-eats-group8.vercel.app` |
+| Source | This repo, **`main`** branch |
+| Root directory | `./` (repo root) |
+| Framework preset | **Other** (static files; no build step) |
+| Build command | None / empty |
+| Install command | None |
+| Environment variables | None (the `EXAMPLE_NAME` placeholder import env was removed) |
+| Deploy trigger | Automatic — every push to `main` |
+| Demo account | `demo@student.com` / `demo123` (auto-seeded on first visit) |
+
+## `vercel.json`
+
+The config that ships in the repo is the multi-page static config — no SPA rewrite:
 
 ```json
 {
@@ -52,38 +30,37 @@ real pages on Vercel. Replace its contents with:
 }
 ```
 
-- Vercel serves existing `.html` files automatically.
+- Vercel serves every real `.html` file automatically.
 - Unknown routes fall back to the repo's `404.html` (Vercel's default behavior).
-- Do **not** add an SPA `/(.*)` rewrite — this is a multi-page app, not an SPA.
 
-If clean URLs cause any issue with relative paths, remove `cleanUrls` and keep
-the config empty (`{}`).
+> **Do not** add an `/(.*)` rewrite — this is a multi-page app, not an SPA. That mistake was the original `vercel.json` bug fixed in `main`.
 
----
+## Incident note: the first Vercel project served the wrong site
 
-## 3. Pre-deploy QA on merged `main`
+Before the correct import, the URL environment displayed a Bootstrap "Online Food Delivery" page that existed in **no** commit of this repo — the deployed Vercel project was linked to a different/older source. **Resolution:** that project was retired/replaced, and the repo was imported fresh as a new project (`Framework preset = Other`, branch `main`, no build/env). After a fresh import, confirm the deployed HTML title reads `CampusEats | Online Food Ordering` and that `/assets/hero.png` returns 200.
 
-Run from a clean clone at `origin/main`:
+## Pre-deploy QA (already run before the merge)
 
-1. `for f in js/*.js; do node --check "$f"; done`
-2. `PORT=8080 node server.js` then walk these flows via curl/browser:
-   - `/` (home), `/login.html`, `/register.html`, `/pages/menu.html`
-   - Menu: shows 18 Nigerian dishes + 9 live dishes; search "pizza" returns live results.
-   - Add to cart while **signed out** → sign-in prompt, nothing in cart.
-   - Login via `demo@student.com` / `demo123` (auto-seeded) → header shows
-     `Hi, Demo · Sign out`; cart badge increments after adding items.
-   - Visit about/cart/checkout/orders/contact → none should be blank.
-3. Check no page references `../pages/...` path mismatches after the
-   root-level `login.html`/`register.html` move.
+All open streams were merged into `dev`, then `dev` was merged into `main` via an approved PR. Before that final merge:
 
----
+- `for f in js/*.js; do node --check "$f"; done`
+- `PORT=8080 node server.js` smoke walkthrough: `/`, `/login.html`, `/register.html`, `/pages/menu.html`, plus about/cart/checkout/orders/contact — none blank, no console errors.
+- Menu shows 18 Nigerian dishes + 9 live dishes; search "pizza" returns live results.
+- Signed-out add-to-cart shows the sign-in toast and adds nothing.
+- Demo login → header shows `Hi, Demo · Sign out`; cart badge increments.
+- Auth-gated cart, checkout and My Orders flows verified.
 
-## 4. Deploy & hand off to testers
+## Redeploying (after future changes)
 
-1. `git checkout main && git pull`; deploy directly from **GitHub → Vercel**
-   (project root: repo root, framework: "Other").
-2. Share the live link plus:
-   - Demo account: `demo@student.com` / `demo123`
-   - Bug reports via the GitHub Issues bug template (`.github/ISSUE_TEMPLATE/bug_report.md`)
-   - A short "known limits" note (any intentionally-stubbed feature that isn't
-     part of this test round) so reports focus on real bugs.
+No manual step is needed — Vercel auto-deploys on pushes to `main`. If you ever need a manual redeploy:
+
+1. Push to `main` (via a merge of `dev`), or
+2. In the Vercel dashboard: project → **Deployments** → latest → **Redeploy**.
+
+## Tester handoff
+
+Share the live link plus:
+
+- Demo account: `demo@student.com` / `demo123`
+- Bug reports via the GitHub Issues bug template (`.github/ISSUE_TEMPLATE/bug_report.md`)
+- Known limits (any intentionally-stubbed feature) so tester reports focus on real bugs.
