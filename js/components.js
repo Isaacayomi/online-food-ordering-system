@@ -17,6 +17,9 @@ const headerHTML = `
         <img src="${rootPath}/assets/logo-mark.svg" alt="" width="56" height="55">
         <span>CampusEats</span>
       </a>
+      <a class="header-orders-link user-only-action" href="${pageLink("orders.html")}" hidden>
+  My Orders
+</a>
       <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
       <nav class="nav-links" aria-label="Primary navigation">
         ${navItems.map(([label, href, file]) => `<a class="${pageName === file ? "is-active" : ""}" href="${href}">${label}</a>`).join("")}
@@ -59,6 +62,10 @@ function renderAuthState() {
   if (!hosts.length) return;
 
   const signedIn = typeof Auth !== "undefined" && Boolean(Auth.current());
+
+document.querySelectorAll(".user-only-action").forEach((element) => {
+  element.hidden = !signedIn;
+});
 
   if (signedIn) {
     const user = Auth.current();

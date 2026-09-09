@@ -70,6 +70,10 @@
   .footer-bottom { padding: 20px 0 24px; font-size: 14px; }
 }
 
+.user-only-action[hidden] {
+  display: none !important;
+}
+
 .header-orders-link {
   text-decoration: none;
   font-weight: 600;

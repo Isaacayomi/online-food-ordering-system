@@ -1,8 +1,12 @@
 const Cart = (() => {
-  const KEY = "foodCart";
+  function getKey() {
+    const user = typeof Auth !== "undefined" ? Auth.current() : null;
+    return user ? `foodCart_${user.id}` : null;
+  }
 
   function read() {
-    return Storage.get(KEY, []);
+    const key = getKey();
+    return key ? Storage.get(key, []) : [];
   }
 
   function count(items = read()) {
@@ -16,10 +20,17 @@ const Cart = (() => {
   }
 
   function write(items) {
-    Storage.set(KEY, items);
-    window.dispatchEvent(new CustomEvent("cartchange", { detail: totals(items) }));
+  const key = getKey();
+
+  if (!key) {
+    window.dispatchEvent(new CustomEvent("cartchange", { detail: totals([]) }));
     return items;
   }
+
+  Storage.set(key, items);
+  window.dispatchEvent(new CustomEvent("cartchange", { detail: totals(items) }));
+  return items;
+}
 
   function add(item) {
     const items = read();

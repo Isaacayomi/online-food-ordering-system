@@ -94,7 +94,6 @@ const Auth = (() => {
 
   function logout() {
   Storage.remove(SESSION_KEY);
-  Storage.remove("foodCart");
 }
 
   function require(href) {
