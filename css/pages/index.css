@@ -15,7 +15,9 @@
 .bistro-hero {
   position: relative;
   display: grid;
-  min-height: 570px;
+  --header-h: 84px;
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
   place-items: center;
   overflow: hidden;
   background: #f9f9f7 url(../../assets/hero.png) center/cover no-repeat;
@@ -438,19 +440,18 @@
   .info-grid > div:last-child {
     max-width: 640px;
   }
-  .bistro-hero {
-    min-height: 530px;
-  }
   .hero-content {
     padding: 60px 0;
+  }
+}
+@media (max-width: 760px) {
+  .bistro-hero {
+    --header-h: 72px;
   }
 }
 @media (max-width: 600px) {
   .bistro-wrap {
     width: min(100% - 32px, 1296px);
-  }
-  .bistro-hero {
-    min-height: 520px;
   }
   .hero-content {
     padding: 40px 0;
