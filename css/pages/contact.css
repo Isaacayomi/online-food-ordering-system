@@ -22,13 +22,35 @@
 .contact-form textarea:focus { border-color: #ad343e; box-shadow: 0 0 0 3px rgba(173,52,62,.12); }
 
 .field-error {
-  color: #b3372f;
-  font-size: 0.8rem;
-  display: block;
-  min-height: 16px;
-  margin-top: 4px;
+  min-height: 18px;
+  color: #ad343e;
+  font-size: 13px;
 }
-.form-status.success {
-  color: #2f7a3a;
-  font-weight: 600;
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 70;
+  max-width: min(92vw, 540px);
+  padding: 14px 24px;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--ink);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  font-size: 15px;
+  line-height: 22px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 14px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
 }
