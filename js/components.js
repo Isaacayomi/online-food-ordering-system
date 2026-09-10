@@ -57,8 +57,7 @@ const footerHTML = `
         </div>
       </section>
       <section class="footer-links"><h2>Pages</h2><a href="${isPage ? "../index.html" : "index.html"}">Home</a><a href="${pageLink("about.html")}">About</a><a href="${pageLink("menu.html")}">Menu</a><a href="${pageLink("contact.html")}">Contact</a><a href="${pageLink("cart.html")}">Cart</a></section>
-      <section class="footer-links"><h2>Utility Pages</h2><a href="${rootPath}/login.html">Log In</a><a href="${rootPath}/register.html">Create Account</a><a href="${pageLink("orders.html")}">My Orders</a></section>
-      <section class="footer-links"><h2>Contact</h2><span>Obafemi Awolowo University</span><span>Mon - Sat: 8:00am - 9:00pm</span></section>
+      <section class="footer-links"><h2>Utility Pages</h2><a class="guest-only-action" href="${rootPath}/login.html">Log In</a><a class="guest-only-action" href="${rootPath}/register.html">Create Account</a><a href="${pageLink("orders.html")}">My Orders</a></section>
     </div>
     <div class="site-shell footer-bottom">Copyright © 2026 CampusEats. All Rights Reserved.</div>
   </footer>`;
@@ -76,11 +75,11 @@ function renderAuthState() {
     element.hidden = !signedIn;
   });
 
-  document.querySelectorAll(".customer-only-action").forEach((element) => {
-    element.hidden = !signedIn || isAdmin;
+  document.querySelectorAll(".guest-only-action").forEach((element) => {
+    element.hidden = signedIn;
   });
 
-  document.querySelectorAll(".non-admin-action").forEach((element) => {
+  document.querySelectorAll(".customer-only-action").forEach((element) => {
     if (isAdmin) element.hidden = true;
   });
 
