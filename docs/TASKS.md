@@ -7,9 +7,9 @@
 **Branch:** `feat/live-menu-auth` (foundation)
 
 - 18-dish Nigerian catalogue (`js/data.js` `Menu.CATALOG`) with real food photos and prices (never an un-priced dish — `PRICE_TABLET` auto-prices live items).
-- Live TheMealDB feed (Chicken / Seafood / Dessert, 3 each, cached in `foodMenu`) — **retired post-merge**: the menu no longer auto-loads a live feed; on-demand live search (`Menu.search`) covers unknown dishes instead.
-- On-demand live search (`Menu.search`) — unknown queries (e.g. "pizza") return up to 6 tagged live results, cached per query.
-- Category chips, instant search with spinner, "Load More" pagination (9 at a time).
+- Live TheMealDB **pool** — up to ~54 international dishes across 14 categories (`Beef`, `Chicken`, `Pasta`, `Seafood`, `Vegetarian`, …) are shuffled, mapped onto the local categories/prices, and merged into `Menu.all()`; revealed progressively with "Load More" and cached in `foodMenu` for instant repeat visits.
+- On-demand live search (`Menu.search`) — unknown queries (e.g. "pizza") return up to 6 live results, cached per query.
+- Category chips, instant search with spinner, "Load More" pagination (9 at a time, local → custom → live pool).
 - Offline-safe image placeholder (`Menu.PLACEHOLDER`) — a card never shows a broken image.
 - Logo favicon.
 

@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const list = document.querySelector("#menu-admin-list");
     const count = document.querySelector("#menu-admin-count");
     if (!list) return;
-    const items = Menu.all();
+    const items = Menu.all().filter((item) => !item.live);
     list.innerHTML = items.length
       ? items.map(menuCardHTML).join("")
       : `<div class="empty-admin">The menu is empty right now.</div>`;

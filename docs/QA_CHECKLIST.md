@@ -23,11 +23,12 @@ Run through these before the defence demo and record results in the table. Also 
 ## Menu
 
 - [ ] All local menu items render with image, name, category and price (18 Nigerian dishes)
-- [ ] Menu loads ONLY the 18 local Nigerian dishes — no auto-loaded live feed; if images fail, a neutral placeholder shows (never a broken image)
-- [ ] Category chips filter correctly; "All" restores everything
+- [ ] The 18 local dishes load instantly, then a spinner appears while ~54 TheMealDB dishes load (first visit); repeat visits are instant via the cached pool
+- [ ] "Load More" reveals 9 more cards at a time — local items first, then custom items, then the live pool — until the list ends
+- [ ] Category chips filter correctly across local, custom and live-pool dishes; "All" restores everything
 - [ ] Search narrows local results instantly; no phony matches (e.g. "jollof" finds local dishes)
 - [ ] Searching an unknown dish (e.g. "pizza") shows a loading spinner, then up to 6 live results
-- [ ] "Load More" reveals 9 more cards and hides when the list ends
+- [ ] A bad image URL in the pool falls back to the neutral placeholder (never a broken image)
 - [ ] **Signed out:** clicking Add to Cart shows a sign-in/register toast and does **not** add anything
 - [ ] **Signed in:** clicking Add to Cart adds the item, flashes "Added ✓", and the header badge increments
 - [ ] Live-search results can be added to cart (signed in)

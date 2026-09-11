@@ -66,9 +66,9 @@ A simple, student-focused web ordering platform solves this by letting users bro
 ### Implemented
 
 - **Local Nigerian menu** — 18 dishes across Starters, Mains, Drinks and Desserts, each with a real food photo, description and price.
-- **Curated local menu** — 18 Nigerian dishes render on load (the auto-loaded TheMealDB feed was retired); images and no-result states degrade gracefully (offline-safe placeholder).
+- **Curated local menu + live pool** — the 18 Nigerian dishes load instantly, joined by a cached pool of up to ~54 TheMealDB international dishes (from 14 categories, shuffled, price-mapped) that surfaces progressively as "Load More" is clicked; images and no-result states degrade gracefully (offline-safe placeholder).
 - **Menu search & filters** — category chips plus instant search; when local results are empty, search queries TheMealDB and renders up to 6 live results (debounced, with a loading spinner).
-- **Pagination** — "Load More" reveals 9 cards at a time until the list ends.
+- **Pagination** — "Load More" reveals 9 cards at a time until the list ends (local, custom and live-pool dishes all paginate together).
 - **Authentication** — register, sign in and sign out with client-side validation (WebCrypto salted SHA-256 hashes); a demo account is seeded on first run. Signed-in users are redirected away from the auth pages; the header switches to "Hi, name / Sign out".
 - **Auth-gated cart** — only signed-in users can add to the cart; signed-out attempts show a toast prompting sign in or account creation (nothing is added).
 - **Cart model & header badge** — `js/cart.js` (add/increment/decrement/remove/clear/totals) persisted to `foodCart`, exposed through a live cart badge in the navbar.
@@ -235,6 +235,7 @@ Because the project is scoped to pure HTML, CSS and JavaScript, all data lives i
 
 - Carts, accounts, orders and messages do not sync across devices or browsers.
 - Menu edits (added/deleted items) live only in the **same browser** where the admin made them — they are `localStorage`-scoped like everything else, ready for a backend to share globally.
+- The TheMealDB pool (~54 dishes) is fetched once and cached in `localStorage`, so it refreshes only when the cache is cleared.
 - The admin dashboard only sees orders placed in the **same browser**. For the demo, place an order first, then sign in as the admin (`admin@campuseats.com` / `admin123`) in that same browser to update its status.
 - Passwords are hashed client-side with salted SHA-256; this demonstrates security awareness but is not a substitute for server-side auth.
 

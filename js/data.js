@@ -204,10 +204,35 @@ const Menu = (() => {
   };
 
   const LIVE_CATEGORIES = [
-    { api: "Chicken", category: "mains", price: 3400 },
-    { api: "Seafood", category: "mains", price: 4200 },
-    { api: "Dessert", category: "desserts", price: 1500 },
+    { api: "Beef", price: 3400 },
+    { api: "Breakfast", price: 1500 },
+    { api: "Chicken", price: 3400 },
+    { api: "Dessert", price: 1500 },
+    { api: "Goat", price: 4000 },
+    { api: "Lamb", price: 4200 },
+    { api: "Miscellaneous", price: 3400 },
+    { api: "Pasta", price: 3000 },
+    { api: "Pork", price: 4000 },
+    { api: "Seafood", price: 4200 },
+    { api: "Side", price: 1500 },
+    { api: "Starter", price: 1500 },
+    { api: "Vegan", price: 1600 },
+    { api: "Vegetarian", price: 1600 },
   ];
+
+  const LIVE_LIMIT = 54;
+
+  const liveCategory = (api) => {
+    const c = api.toLowerCase();
+    if (c === "dessert") return "desserts";
+    if (c === "side" || c === "starter" || c === "breakfast")
+      return "starters";
+    if (c === "vegan" || c === "vegetarian") return "starters";
+    return "mains";
+  };
+
+  const livePrice = (api) =>
+    LIVE_CATEGORIES.find((entry) => entry.api === api)?.price || 3400;
 
   function guessCategory(category) {
     const c = String(category || "").toLowerCase();
@@ -217,8 +242,17 @@ const Menu = (() => {
     return "mains";
   }
 
+  function shuffle(list) {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
   function normalizeLive(payload, category, price) {
-    return (payload.meals || []).slice(0, 3).map((meal) => ({
+    return (payload.meals || []).map((meal) => ({
       id: `live-${meal.idMeal}`,
       name: meal.strMeal,
       category,
@@ -230,10 +264,14 @@ const Menu = (() => {
     }));
   }
 
+  let livePool = [];
+
   async function loadLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    if (cached && Array.isArray(cached.live) && cached.live.length)
+    if (cached && Array.isArray(cached.live) && cached.live.length) {
+      livePool = cached.live;
       return cached.live;
+    }
 
     const results = await Promise.allSettled(
       LIVE_CATEGORIES.map(({ api }) =>
@@ -250,18 +288,28 @@ const Menu = (() => {
         result.value &&
         Array.isArray(result.value.meals)
       ) {
-        const { category, price } = LIVE_CATEGORIES[index];
-        live.push(...normalizeLive(result.value, category, price));
+        live.push(
+          ...normalizeLive(
+            result.value,
+            liveCategory(LIVE_CATEGORIES[index].api),
+            livePrice(LIVE_CATEGORIES[index].api),
+          ),
+        );
       }
     });
 
-    Storage.set(CACHE_KEY, { savedAt: Date.now(), live });
-    return live;
+    livePool = shuffle(live).slice(0, LIVE_LIMIT);
+    Storage.set(CACHE_KEY, { savedAt: Date.now(), live: livePool });
+    return livePool;
   }
 
   function getCachedLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    return cached && Array.isArray(cached.live) ? cached.live : [];
+    if (cached && Array.isArray(cached.live)) {
+      livePool = cached.live;
+      return cached.live;
+    }
+    return [];
   }
 
   async function search(query) {
@@ -319,7 +367,7 @@ const Menu = (() => {
   }
 
   function all() {
-    return [...CATALOG, ...custom()];
+    return [...CATALOG, ...custom(), ...livePool];
   }
 
   function persist(list) {
