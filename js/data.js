@@ -221,6 +221,7 @@ const Menu = (() => {
   ];
 
   const LIVE_LIMIT = 108;
+  const LIVE_POOL_VERSION = 2;
 
   const liveCategory = (api) => {
     const c = api.toLowerCase();
@@ -268,7 +269,12 @@ const Menu = (() => {
 
   async function loadLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    if (cached && Array.isArray(cached.live) && cached.live.length) {
+    if (
+      cached &&
+      cached.v === LIVE_POOL_VERSION &&
+      Array.isArray(cached.live) &&
+      cached.live.length
+    ) {
       livePool = cached.live;
       return cached.live;
     }
@@ -299,13 +305,21 @@ const Menu = (() => {
     });
 
     livePool = shuffle(live).slice(0, LIVE_LIMIT);
-    Storage.set(CACHE_KEY, { savedAt: Date.now(), live: livePool });
+    Storage.set(CACHE_KEY, {
+      savedAt: Date.now(),
+      live: livePool,
+      v: LIVE_POOL_VERSION,
+    });
     return livePool;
   }
 
   function getCachedLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    if (cached && Array.isArray(cached.live)) {
+    if (
+      cached &&
+      cached.v === LIVE_POOL_VERSION &&
+      Array.isArray(cached.live)
+    ) {
       livePool = cached.live;
       return cached.live;
     }
