@@ -13,6 +13,9 @@
     Menu.CATALOG.find((dish) => dish.id === id)
   ).filter(Boolean);
 
+  const adminView =
+    typeof Auth !== "undefined" && Auth.isAdmin();
+
   let toastEl = null;
   let toastTimer = null;
 
@@ -46,7 +49,7 @@
         <div class="feature-dish__body">
           <h3>${Utils.escapeHTML(dish.name)}</h3>
           <p class="feature-price">${Utils.money(dish.price)}</p>
-          <button class="btn-add" type="button" data-add="${dish.id}">Add to Cart</button>
+          ${adminView ? "" : `<button class="btn-add" type="button" data-add="${dish.id}">Add to Cart</button>`}
         </div>
       </article>`
     )
@@ -55,6 +58,7 @@
   grid.addEventListener("click", (event) => {
     const button = event.target.closest("[data-add]");
     if (!button || typeof Cart === "undefined") return;
+    if (typeof Auth !== "undefined" && Auth.isAdmin()) return;
 
     const dish = dishes.find((item) => item.id === button.dataset.add);
     if (!dish) return;

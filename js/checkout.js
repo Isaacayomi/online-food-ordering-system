@@ -6,6 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  if (Auth.isAdmin()) {
+    main.innerHTML = `
+      <section class="checkout-page">
+        <div class="checkout-wrap">
+          <div class="empty-checkout">
+            <h1>Admins can't place orders</h1>
+            <p>Admin accounts manage orders and the menu — they can't order food.</p>
+            <a href="menu.html">View Menu</a>
+            <a href="admin.html">Admin Dashboard</a>
+          </div>
+        </div>
+      </section>
+    `;
+    return;
+  }
+
   const user = Auth.current();
   const items = Cart.getItems();
 
