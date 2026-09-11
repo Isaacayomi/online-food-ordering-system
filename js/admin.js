@@ -333,12 +333,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleAddItem(event) {
     event.preventDefault();
     const form = event.currentTarget;
-    const elements = form.elements;
-    const name = String(elements["name"].value || "").trim();
-    const category = elements["category"].value;
-    const price = Number(elements["price"].value);
-    const description = String(elements["description"].value || "").trim();
-    const image = String(elements["image"].value || "").trim();
+    const get = (id) => form.querySelector(`#${id}`);
+    const name = String(get("item-name").value || "").trim();
+    const category = get("item-category").value;
+    const price = Number(get("item-price").value);
+    const description = String(get("item-description").value || "").trim();
+    const image = String(get("item-image").value || "").trim();
 
     if (!name) return showToast("Give the item a name.");
     if (!CATEGORIES.includes(category))
@@ -457,8 +457,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.target.id === "image-preview-clear") {
       const form = document.querySelector("#add-menu-form");
       if (form) {
-        form.elements["image"].value = "";
-        form.elements["image-file"].value = "";
+        form.querySelector("#item-image").value = "";
+        form.querySelector("#item-image-file").value = "";
       }
       showImagePreview("");
     }
