@@ -69,6 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return counts;
   }
 
+  const MENU_PAGE_SIZE = 18;
+  let menuShown = MENU_PAGE_SIZE;
+  let menuLoadingLive = false;
+
   let activePanel = "orders";
   let activeFilter = "all";
 
@@ -224,9 +228,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="menu-admin-head">
           <h2>Current menu</h2>
-          <span class="menu-admin-count" id="menu-admin-count"></span>
         </div>
+        <div class="menu-admin-status" id="menu-admin-status" hidden></div>
         <div class="admin-menu-grid" id="menu-admin-list"></div>
+        <div class="menu-admin-load-wrap">
+          <button class="menu-admin-load-btn" id="menu-admin-load" type="button" hidden>Load more dishes…</button>
+        </div>
       </section>
     `;
   }
@@ -248,8 +255,10 @@ document.addEventListener("DOMContentLoaded", () => {
       </section>
     `;
 
-    if (activePanel === "menu") renderMenuList();
-    else renderList();
+    if (activePanel === "menu") {
+      renderMenuList();
+      ensureLivePool();
+    } else renderList();
   }
 
   function renderList() {
@@ -271,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function menuCardHTML(item) {
     const deleteControl = item.custom
       ? `<button class="btn-delete" type="button" data-delete-item="${Utils.escapeHTML(item.id)}">Delete</button>`
-      : `<button class="btn-delete is-disabled" type="button" disabled title="Built-in menu item — can't be deleted">Built-in</button>`;
+      : "";
     return `
       <article class="menu-admin-card">
         <img class="menu-admin-thumb" src="${Menu.url(item)}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src=Menu.PLACEHOLDER">
@@ -290,13 +299,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderMenuList() {
     const list = document.querySelector("#menu-admin-list");
-    const count = document.querySelector("#menu-admin-count");
+    const load = document.querySelector("#menu-admin-load");
+    const status = document.querySelector("#menu-admin-status");
     if (!list) return;
-    const items = Menu.all().filter((item) => !item.live);
-    list.innerHTML = items.length
-      ? items.map(menuCardHTML).join("")
+
+    const items = Menu.all();
+    const visible = items.slice(0, menuShown);
+
+    if (menuLoadingLive && status) {
+      status.hidden = false;
+      status.replaceChildren(
+        Object.assign(document.createElement("span"), {
+          className: "spinner",
+          role: "status",
+          "aria-label": "Loading",
+        }),
+        document.createTextNode(" Loading live dishes from TheMealDB…"),
+      );
+    } else if (status) {
+      status.hidden = true;
+      status.replaceChildren();
+    }
+
+    list.innerHTML = visible.length
+      ? visible.map(menuCardHTML).join("")
       : `<div class="empty-admin">The menu is empty right now.</div>`;
-    if (count) count.textContent = `${items.length} item${items.length === 1 ? "" : "s"}`;
+
+    if (load) load.hidden = visible.length >= items.length;
+  }
+
+  async function ensureLivePool() {
+    if (Menu.getCachedLive().length || menuLoadingLive) return;
+    menuLoadingLive = true;
+    renderMenuList();
+    try {
+      await Menu.loadLive();
+    } catch (err) {
+      // offline or rate-limited — show built-in + custom dishes only
+    } finally {
+      menuLoadingLive = false;
+      renderMenuList();
+    }
   }
 
   function renderCounts() {
@@ -383,15 +426,29 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const loadMenu = event.target.closest("#menu-admin-load");
+    if (loadMenu) {
+      menuShown += MENU_PAGE_SIZE;
+      renderMenuList();
+      return;
+    }
+
     const deleteButton = event.target.closest("[data-delete-item]");
     if (deleteButton) {
       const id = deleteButton.dataset.deleteItem;
       const item = Menu.all().find((entry) => entry.id === id);
-      if (item && window.confirm(`Delete "${item.name}" from the menu?`)) {
+      if (!item) return;
+      confirmModal({
+        title: "Delete menu item?",
+        message: `Delete "${Utils.escapeHTML(item.name)}" from the menu? This can't be undone.`,
+        confirmLabel: "Delete",
+        danger: true,
+      }).then((ok) => {
+        if (!ok) return;
         Menu.remove(id);
         renderMenuList();
         showToast(`Removed "${item.name}" from the menu.`);
-      }
+      });
       return;
     }
 
@@ -461,6 +518,15 @@ document.addEventListener("DOMContentLoaded", () => {
         form.querySelector("#item-image-file").value = "";
       }
       showImagePreview("");
+    }
+  });
+
+  window.addEventListener("menu-changed", () => {
+    if (activePanel === "menu") renderMenuList();
+  });
+  window.addEventListener("storage", (event) => {
+    if (event.key === "ceCustomMenu" || event.key === null) {
+      if (activePanel === "menu") renderMenuList();
     }
   });
 

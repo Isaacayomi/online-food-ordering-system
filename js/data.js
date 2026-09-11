@@ -381,7 +381,7 @@ const Menu = (() => {
   }
 
   function all() {
-    return [...CATALOG, ...custom(), ...livePool];
+    return [...custom().reverse(), ...CATALOG, ...livePool];
   }
 
   function persist(list) {

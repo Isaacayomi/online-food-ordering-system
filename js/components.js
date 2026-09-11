@@ -106,13 +106,18 @@ function renderAuthState() {
       signOut.className = "auth-button";
       signOut.textContent = "Sign out";
       signOut.addEventListener("click", () => {
-        if (typeof Auth !== "undefined") {
-          confirmSignOut(() => {
-            Auth.logout();
-            Storage.set("ceSignedOut", true);
-            window.location.href = `${rootPath}/index.html`;
-          });
-        }
+        if (typeof Auth === "undefined") return;
+        confirmModal({
+          title: "Sign out?",
+          message: "Are you sure you want to sign out of CampusEats?",
+          confirmLabel: "Sign out",
+          danger: true,
+        }).then((ok) => {
+          if (!ok) return;
+          Auth.logout();
+          Storage.set("ceSignedOut", true);
+          window.location.href = `${rootPath}/index.html`;
+        });
       });
 
       host.replaceChildren(welcome, signOut);
@@ -165,19 +170,23 @@ function showToast(message) {
   );
 }
 
-function confirmSignOut(onConfirm) {
+let modalSeq = 0;
+
+function confirmModal(options = {}) {
+  const { title = "Are you sure?", message = "", confirmLabel = "Confirm", cancelLabel = "Cancel", danger = false } = options;
   const previouslyFocused = document.activeElement;
+  const idPrefix = `modal-${++modalSeq}`;
 
   const backdrop = document.createElement("div");
   backdrop.className = "modal-backdrop";
 
   backdrop.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signout-title" aria-describedby="signout-message">
-      <h2 class="modal-title" id="signout-title">Sign out?</h2>
-      <p class="modal-message" id="signout-message">Are you sure you want to sign out of CampusEats?</p>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="${idPrefix}-title" aria-describedby="${idPrefix}-message">
+      <h2 class="modal-title" id="${idPrefix}-title">${title}</h2>
+      <p class="modal-message" id="${idPrefix}-message">${message}</p>
       <div class="modal-actions">
-        <button type="button" class="modal-button" data-modal-cancel>Cancel</button>
-        <button type="button" class="modal-button modal-button--danger" data-modal-confirm>Sign out</button>
+        <button type="button" class="modal-button" data-modal-cancel>${cancelLabel}</button>
+        <button type="button" class="modal-button${danger ? " modal-button--danger" : ""}" data-modal-confirm>${confirmLabel}</button>
       </div>
     </div>
   `;
@@ -193,7 +202,7 @@ function confirmSignOut(onConfirm) {
 
   function onKeydown(event) {
     if (event.key === "Escape") {
-      close();
+      resolve(false);
       return;
     }
     if (event.key !== "Tab") return;
@@ -212,23 +221,28 @@ function confirmSignOut(onConfirm) {
     }
   }
 
+  function resolve(value) {
+    close();
+    resolveModal(value);
+  }
+
   backdrop.addEventListener("click", (event) => {
-    if (event.target === backdrop) close();
+    if (event.target === backdrop) resolve(false);
   });
-  backdrop
-    .querySelector("[data-modal-cancel]")
-    .addEventListener("click", close);
-  backdrop
-    .querySelector("[data-modal-confirm]")
-    .addEventListener("click", () => {
-      close();
-      onConfirm();
-    });
+  backdrop.querySelector("[data-modal-cancel]").addEventListener("click", () => resolve(false));
+  backdrop.querySelector("[data-modal-confirm]").addEventListener("click", () => resolve(true));
+
+  let resolveModal;
+  const promise = new Promise((res) => {
+    resolveModal = res;
+  });
 
   document.body.classList.add("no-scroll");
   document.body.appendChild(backdrop);
   document.addEventListener("keydown", onKeydown);
   backdrop.querySelector("[data-modal-cancel]").focus();
+
+  return promise;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
