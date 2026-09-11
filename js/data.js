@@ -1,6 +1,7 @@
 const Menu = (() => {
   const rootPath = window.location.pathname.includes("/pages/") ? "../" : "";
   const CACHE_KEY = "foodMenu";
+  const CUSTOM_KEY = "ceCustomMenu";
 
   const PLACEHOLDER =
     "data:image/svg+xml," +
@@ -306,9 +307,51 @@ const Menu = (() => {
   }
 
   function url(item) {
-    return item.image.startsWith("http")
-      ? item.image
-      : `${rootPath}${item.image}`;
+    const src = item.image || "";
+    return src.startsWith("http") || src.startsWith("data:")
+      ? src
+      : `${rootPath}${src}`;
+  }
+
+  function custom() {
+    const list = Storage.get(CUSTOM_KEY, []);
+    return Array.isArray(list) ? list : [];
+  }
+
+  function all() {
+    return [...CATALOG, ...custom()];
+  }
+
+  function persist(list) {
+    try {
+      localStorage.setItem(CUSTOM_KEY, JSON.stringify(list));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function add(item) {
+    const list = custom();
+    const next = {
+      id: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+      name: item.name,
+      category: item.category,
+      price: Number(item.price),
+      description: item.description || "",
+      image: item.image || "",
+      custom: true,
+    };
+    if (!persist([...list, next])) return null;
+    window.dispatchEvent(new CustomEvent("menu-changed"));
+    return next;
+  }
+
+  function remove(id) {
+    const list = custom().filter((item) => item.id !== id);
+    if (!persist(list)) return false;
+    window.dispatchEvent(new CustomEvent("menu-changed"));
+    return true;
   }
 
   return {
@@ -319,5 +362,9 @@ const Menu = (() => {
     search,
     url,
     PLACEHOLDER,
+    custom,
+    all,
+    add,
+    remove,
   };
 })();

@@ -91,6 +91,16 @@
 
 **Files:** `pages/admin.html`, `css/pages/admin.css`, `js/admin.js`, `js/auth.js`, `js/components.js`, `js/orders.js`, `css/pages/orders.css`.
 
+## 9. Admin menu management — ✅ merged
+
+- `js/data.js` exposes a custom-menu layer over `ceCustomMenu`: `Menu.custom()`, `Menu.all()` (built-in catalog + custom items), `Menu.add()`, `Menu.remove()`, and `Menu.url()` now also serves `data:` image URLs; add/remove dispatch a `menu-changed` event.
+- `js/menu.js` renders from `Menu.all()` instead of the raw catalog and re-renders on `menu-changed` / cross-tab `storage`, so admin edits appear live on the menu page.
+- `js/admin.js` gains an Orders/Menu switch: the Menu panel has an add-item form (name, category, price, description, image via URL or a ≤300 KB upload with live preview) that validates via `Utils` conventions and deletes custom items (built-ins are read-only with a disabled control).
+- Orders flow is untouched — custom items go through `Cart` → checkout → `foodOrders` like built-ins.
+- Removed the "Live results for …" badge on live-search cards (cards render without a flag; `card-flag` CSS deleted).
+
+**Files:** `js/data.js`, `js/menu.js`, `js/admin.js`, `css/pages/admin.css`, `css/pages/menu.css`.
+
 ---
 
 ## Delivery rules that were enforced on every stream

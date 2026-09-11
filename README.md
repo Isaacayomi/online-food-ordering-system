@@ -67,7 +67,7 @@ A simple, student-focused web ordering platform solves this by letting users bro
 
 - **Local Nigerian menu** — 18 dishes across Starters, Mains, Drinks and Desserts, each with a real food photo, description and price.
 - **Curated local menu** — 18 Nigerian dishes render on load (the auto-loaded TheMealDB feed was retired); images and no-result states degrade gracefully (offline-safe placeholder).
-- **Menu search & filters** — category chips plus instant search; when local results are empty, search queries TheMealDB and renders up to 6 live results tagged "Live results for …" (debounced, with a loading spinner).
+- **Menu search & filters** — category chips plus instant search; when local results are empty, search queries TheMealDB and renders up to 6 live results (debounced, with a loading spinner).
 - **Pagination** — "Load More" reveals 9 cards at a time until the list ends.
 - **Authentication** — register, sign in and sign out with client-side validation (WebCrypto salted SHA-256 hashes); a demo account is seeded on first run. Signed-in users are redirected away from the auth pages; the header switches to "Hi, name / Sign out".
 - **Auth-gated cart** — only signed-in users can add to the cart; signed-out attempts show a toast prompting sign in or account creation (nothing is added).
@@ -78,6 +78,7 @@ A simple, student-focused web ordering platform solves this by letting users bro
 - **Cart page** — the real cart with quantity steppers, line totals, removal, "Clear cart", live subtotal/₦500-delivery/total, an empty state and a checkout action that is disabled until items exist.
 - **Checkout & My Orders** — a validated delivery-details form that creates a `Pending` order, and an order-history page (newest first) with an empty state and status-coloured badges.
 - **Admin dashboard** — a seeded admin account (`admin@campuseats.com` / `admin123`) gets an "Admin" nav link and a dashboard listing every order, with per-status filter tabs and a status control (Pending → Preparing → Out for Delivery → Delivered / Cancelled) that updates orders in real time.
+- **Admin menu management** — an Orders/Menu switch on the dashboard; the admin can add menu items (name, category, price, description, image via URL or a ≤300 KB upload) that appear instantly across the menu page and work in carts/checkout/orders, and delete any custom item (built-in items stay read-only).
 - **About page** — a platform narrative (what CampusEats is and why it was built) with a menu/account call-to-action.
 - **Contact validation** — the contact form validates name/email/subject/message, saves messages to `foodMessages` and shows success feedback.
 
@@ -233,6 +234,7 @@ At a glance:
 Because the project is scoped to pure HTML, CSS and JavaScript, all data lives in the browser's `localStorage` and never leaves the device:
 
 - Carts, accounts, orders and messages do not sync across devices or browsers.
+- Menu edits (added/deleted items) live only in the **same browser** where the admin made them — they are `localStorage`-scoped like everything else, ready for a backend to share globally.
 - The admin dashboard only sees orders placed in the **same browser**. For the demo, place an order first, then sign in as the admin (`admin@campuseats.com` / `admin123`) in that same browser to update its status.
 - Passwords are hashed client-side with salted SHA-256; this demonstrates security awareness but is not a substitute for server-side auth.
 

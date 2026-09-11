@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "Cancelled",
   ];
 
+  const CATEGORIES = ["starters", "mains", "drinks", "desserts"];
+  const MAX_IMAGE_BYTES = 300 * 1024;
+
   const statusKey = (status) =>
     String(status || "Pending")
       .toLowerCase()
@@ -32,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const money = (value) => `₦${Number(value).toLocaleString("en-NG")}`;
+
+  const labelFor = (category) =>
+    category.charAt(0).toUpperCase() + category.slice(1);
 
   let toastEl = null;
   let toastTimer = null;
@@ -63,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return counts;
   }
 
+  let activePanel = "orders";
   let activeFilter = "all";
 
   function orderCardHTML(order) {
@@ -123,54 +130,131 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  function render() {
+  function panelTabsHTML() {
+    return `
+      <div class="admin-panel-tabs" role="tablist" aria-label="Admin sections">
+        <button class="admin-tab ${activePanel === "orders" ? "is-active" : ""}" type="button" data-panel="orders" aria-pressed="${activePanel === "orders"}">
+          Orders
+        </button>
+        <button class="admin-tab ${activePanel === "menu" ? "is-active" : ""}" type="button" data-panel="menu" aria-pressed="${activePanel === "menu"}">
+          Menu
+        </button>
+      </div>
+    `;
+  }
+
+  function ordersPanelHTML() {
     const orders = getOrders();
     const counts = countStatuses();
+    return `
+      <div class="admin-stats" aria-label="Order statistics">
+        <span class="stat-chip"><strong data-count="total">${orders.length}</strong> Total</span>
+        ${ORDER_STATUSES.map(
+          (status) => `
+          <span class="stat-chip stat-chip--${statusKey(status)}">
+            <strong data-count="${Utils.escapeHTML(status)}">${counts[status] || 0}</strong> ${Utils.escapeHTML(status)}
+          </span>
+        `,
+        ).join("")}
+      </div>
 
+      <div class="admin-tabs" role="tablist" aria-label="Filter orders by status">
+        <button class="admin-tab ${activeFilter === "all" ? "is-active" : ""}" data-filter="all" type="button">
+          All <span>(${orders.length})</span>
+        </button>
+        ${ORDER_STATUSES.map(
+          (status) => `
+          <button class="admin-tab ${activeFilter === status ? "is-active" : ""}" data-filter="${Utils.escapeHTML(status)}" type="button">
+            ${Utils.escapeHTML(status)} <span>(${counts[status] || 0})</span>
+          </button>
+        `,
+        ).join("")}
+      </div>
+
+      <div class="orders-list" id="orders-list"></div>
+    `;
+  }
+
+  function menuPanelHTML() {
+    return `
+      <section class="admin-menu" aria-label="Menu management">
+        <form class="admin-add-form" id="add-menu-form" novalidate>
+          <h2>Add a menu item</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="item-name">Name</label>
+              <input id="item-name" name="name" type="text" required placeholder="e.g. Jollof & Grilled Chicken" />
+            </div>
+            <div class="form-field">
+              <label for="item-category">Category</label>
+              <select id="item-category" name="category">
+                ${CATEGORIES.map(
+                  (category) =>
+                    `<option value="${category}">${labelFor(category)}</option>`,
+                ).join("")}
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="item-price">Price (₦)</label>
+              <input id="item-price" name="price" type="number" min="1" step="any" required placeholder="e.g. 2500" />
+            </div>
+            <div class="form-field form-field--wide">
+              <label for="item-description">Description</label>
+              <textarea id="item-description" name="description" rows="3" placeholder="Short description shown on the menu card."></textarea>
+            </div>
+
+            <div class="form-field form-field--wide">
+              <label for="item-image">Image</label>
+              <div class="image-input-row">
+                <input id="item-image" name="image" type="url" placeholder="Paste an image URL (https://…)" />
+                <span class="image-input-or">or</span>
+                <label class="image-upload" for="item-image-file">Upload image</label>
+                <input id="item-image-file" name="image-file" type="file" accept="image/*" hidden />
+              </div>
+              <p class="form-note">Paste an image URL or upload one (max 300 KB). </p>
+              <div class="image-preview" id="image-preview" hidden>
+                <img id="image-preview-img" alt="Preview" />
+                <button type="button" class="preview-clear" id="image-preview-clear" aria-label="Clear image">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="admin-submit" type="submit">Add to menu</button>
+        </form>
+
+        <div class="menu-admin-head">
+          <h2>Current menu</h2>
+          <span class="menu-admin-count" id="menu-admin-count"></span>
+        </div>
+        <div class="admin-menu-grid" id="menu-admin-list"></div>
+      </section>
+    `;
+  }
+
+  function render() {
     main.innerHTML = `
       <section class="admin-page">
         <div class="admin-wrap">
 
           <div class="admin-hero">
             <h1>Admin Dashboard</h1>
-            <p>Review and update every CampusEats order.</p>
+            <p>${activePanel === "menu" ? "Add and manage the items on the CampusEats menu." : "Review and update every CampusEats order."}</p>
           </div>
 
-          <div class="admin-stats" aria-label="Order statistics">
-            <span class="stat-chip"><strong data-count="total">${orders.length}</strong> Total</span>
-            ${ORDER_STATUSES.map(
-              (status) => `
-              <span class="stat-chip stat-chip--${statusKey(status)}">
-                <strong data-count="${Utils.escapeHTML(status)}">${counts[status] || 0}</strong> ${Utils.escapeHTML(status)}
-              </span>
-            `,
-            ).join("")}
-          </div>
+          ${panelTabsHTML()}
 
-          <div class="admin-tabs" role="tablist" aria-label="Filter orders by status">
-            <button class="admin-tab ${activeFilter === "all" ? "is-active" : ""}" data-filter="all" type="button">
-              All <span>(${orders.length})</span>
-            </button>
-            ${ORDER_STATUSES.map(
-              (status) => `
-              <button class="admin-tab ${activeFilter === status ? "is-active" : ""}" data-filter="${Utils.escapeHTML(status)}" type="button">
-                ${Utils.escapeHTML(status)} <span>(${counts[status] || 0})</span>
-              </button>
-            `,
-            ).join("")}
-          </div>
-
-          <div class="orders-list" id="orders-list"></div>
-
+          ${activePanel === "orders" ? ordersPanelHTML() : menuPanelHTML()}
         </div>
       </section>
     `;
 
-    renderList();
+    if (activePanel === "menu") renderMenuList();
+    else renderList();
   }
 
   function renderList() {
     const list = document.querySelector("#orders-list");
+    if (!list) return;
     const orders = getOrders();
     const filtered =
       activeFilter === "all"
@@ -184,6 +268,37 @@ document.addEventListener("DOMContentLoaded", () => {
       : `<div class="empty-admin">No ${activeFilter === "all" ? "" : activeFilter + " "}orders here yet.</div>`;
   }
 
+  function menuCardHTML(item) {
+    const deleteControl = item.custom
+      ? `<button class="btn-delete" type="button" data-delete-item="${Utils.escapeHTML(item.id)}">Delete</button>`
+      : `<button class="btn-delete is-disabled" type="button" disabled title="Built-in menu item — can't be deleted">Built-in</button>`;
+    return `
+      <article class="menu-admin-card">
+        <img class="menu-admin-thumb" src="${Menu.url(item)}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src=Menu.PLACEHOLDER">
+        <div class="menu-admin-info">
+          <div class="menu-admin-top">
+            <h3>${Utils.escapeHTML(item.name)}</h3>
+            <span class="menu-admin-price">${money(item.price)}</span>
+          </div>
+          <span class="menu-admin-cat">${labelFor(item.category)}</span>
+          <p>${Utils.escapeHTML(item.description || "No description yet.")}</p>
+        </div>
+        ${deleteControl}
+      </article>
+    `;
+  }
+
+  function renderMenuList() {
+    const list = document.querySelector("#menu-admin-list");
+    const count = document.querySelector("#menu-admin-count");
+    if (!list) return;
+    const items = Menu.all();
+    list.innerHTML = items.length
+      ? items.map(menuCardHTML).join("")
+      : `<div class="empty-admin">The menu is empty right now.</div>`;
+    if (count) count.textContent = `${items.length} item${items.length === 1 ? "" : "s"}`;
+  }
+
   function renderCounts() {
     const orders = getOrders();
     const counts = countStatuses();
@@ -193,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
       strong.textContent = key === "total" ? orders.length : counts[key] || 0;
     });
 
-    document.querySelectorAll(".admin-tab").forEach((tab) => {
+    document.querySelectorAll(".admin-tabs .admin-tab").forEach((tab) => {
       const key = tab.dataset.filter;
       const span = tab.querySelector("span");
       if (span) {
@@ -202,7 +317,84 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function showImagePreview(src) {
+    const preview = document.querySelector("#image-preview");
+    const image = document.querySelector("#image-preview-img");
+    if (!preview || !image) return;
+    if (!src) {
+      preview.hidden = true;
+      image.removeAttribute("src");
+      return;
+    }
+    image.src = src;
+    preview.hidden = false;
+  }
+
+  function handleAddItem(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const elements = form.elements;
+    const name = String(elements["name"].value || "").trim();
+    const category = elements["category"].value;
+    const price = Number(elements["price"].value);
+    const description = String(elements["description"].value || "").trim();
+    const image = String(elements["image"].value || "").trim();
+
+    if (!name) return showToast("Give the item a name.");
+    if (!CATEGORIES.includes(category))
+      return showToast("Pick a valid category.");
+    if (!Number.isFinite(price) || price <= 0)
+      return showToast("Enter a valid price larger than ₦0.");
+    if (image && !/^(https?:\/\/|data:image\/)/i.test(image))
+      return showToast("Enter a valid image URL or upload a photo.");
+
+    const added = Menu.add({ name, category, price, description, image });
+    if (!added) return showToast("Could not save — browser storage is full. Use an image URL instead.");
+
+    form.reset();
+    showImagePreview("");
+    renderMenuList();
+    showToast(`Added "${name}" to the menu.`);
+  }
+
+  function handleImageFile(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (file.size > MAX_IMAGE_BYTES) {
+      showToast("Image is too large — keep it under 300 KB.");
+      event.target.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      document.querySelector("#item-image").value = reader.result;
+      showImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  }
+
   main.addEventListener("click", (event) => {
+    const panel = event.target.closest("[data-panel]");
+    if (panel) {
+      activePanel = panel.dataset.panel;
+      activeFilter = "all";
+      render();
+      return;
+    }
+
+    const deleteButton = event.target.closest("[data-delete-item]");
+    if (deleteButton) {
+      const id = deleteButton.dataset.deleteItem;
+      const item = Menu.all().find((entry) => entry.id === id);
+      if (item && window.confirm(`Delete "${item.name}" from the menu?`)) {
+        Menu.remove(id);
+        renderMenuList();
+        showToast(`Removed "${item.name}" from the menu.`);
+      }
+      return;
+    }
+
     const tab = event.target.closest(".admin-tab");
     if (!tab) return;
     activeFilter = tab.dataset.filter;
@@ -211,42 +403,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   main.addEventListener("change", (event) => {
     const select = event.target.closest(".status-select");
-    if (!select) return;
+    if (select) {
+      const orderId = select.dataset.orderId;
+      const newStatus = select.value;
+      const orders = Storage.get("foodOrders", []);
 
-    const orderId = select.dataset.orderId;
-    const newStatus = select.value;
-    const orders = Storage.get("foodOrders", []);
+      const order = orders.find((entry) => entry.id === orderId);
+      if (!order || order.status === newStatus) return;
 
-    const order = orders.find((entry) => entry.id === orderId);
-    if (!order || order.status === newStatus) return;
+      order.status = newStatus;
+      order.updatedAt = Date.now();
+      Storage.set("foodOrders", orders);
 
-    order.status = newStatus;
-    order.updatedAt = Date.now();
-    Storage.set("foodOrders", orders);
+      const card = select.closest(".order-card");
+      if (card) {
+        const badge = card.querySelector(".order-status");
+        if (badge) {
+          badge.className = badge.className
+            .split(" ")
+            .filter((className) => !className.startsWith("order-status--"))
+            .concat(`order-status--${statusKey(newStatus)}`)
+            .join(" ");
+          badge.textContent = newStatus;
+        }
 
-    const card = select.closest(".order-card");
-    if (card) {
-      const badge = card.querySelector(".order-status");
-      if (badge) {
-        badge.className = badge.className
-          .split(" ")
-          .filter((className) => !className.startsWith("order-status--"))
-          .concat(`order-status--${statusKey(newStatus)}`)
-          .join(" ");
-        badge.textContent = newStatus;
-      }
-
-      if (activeFilter !== "all" && newStatus !== activeFilter) {
-        card.remove();
-        const list = document.querySelector("#orders-list");
-        if (list && !list.children.length) {
-          list.innerHTML = `<div class="empty-admin">No ${activeFilter} orders here yet.</div>`;
+        if (activeFilter !== "all" && newStatus !== activeFilter) {
+          card.remove();
+          const list = document.querySelector("#orders-list");
+          if (list && !list.children.length) {
+            list.innerHTML = `<div class="empty-admin">No ${activeFilter} orders here yet.</div>`;
+          }
         }
       }
+
+      renderCounts();
+      showToast(`Order #${orderId} marked as ${newStatus}.`);
+      return;
     }
 
-    renderCounts();
-    showToast(`Order #${orderId} marked as ${newStatus}.`);
+    const fileInput = event.target.closest("#item-image-file");
+    if (fileInput) handleImageFile(event);
+  });
+
+  main.addEventListener("input", (event) => {
+    if (event.target.id === "item-image") showImagePreview(event.target.value.trim());
+  });
+
+  main.addEventListener("submit", (event) => {
+    if (event.target.id === "add-menu-form") handleAddItem(event);
+  });
+
+  main.addEventListener("click", (event) => {
+    if (event.target.id === "image-preview-clear") {
+      const form = document.querySelector("#add-menu-form");
+      if (form) {
+        form.elements["image"].value = "";
+        form.elements["image-file"].value = "";
+      }
+      showImagePreview("");
+    }
   });
 
   render();
