@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!item) return;
       confirmModal({
         title: "Delete menu item?",
-        message: `Delete "${item.name}" from the menu? This can't be undone.`,
+        message: `Delete "${Utils.escapeHTML(item.name)}" from the menu? This can't be undone.`,
         confirmLabel: "Delete",
         danger: true,
       }).then((ok) => {
