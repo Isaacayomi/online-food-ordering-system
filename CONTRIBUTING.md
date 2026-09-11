@@ -121,3 +121,31 @@ And verify:
 - [ ] No user input is inserted into the DOM without escaping.
 - [ ] The shared header/footer still render, and the cart badge updates.
 - [ ] You have not committed secrets, local config or junk files.
+
+## Team / Contributors
+
+- Nzekwe Uchechi Theresa — SWE/2023/044
+- Nwobi Chukwubuikem Victory — SWE/2023/043
+- Okunlola Isaac Ayomide — SWE/2024/003
+- JIMOH AISHAT OMOLARA — SWE/2023/038
+- ADEJUMO Isaac Oyinlola — SWE/2023/008
+- Adegbenjo Testimony Oluwatosin — SWE/2023/006
+- Ajekiigbe Nathanael Obaloluwa — SWE/2023/020
+- AFEIYE AL FADEL UNOTSEWO — SWE/2023/017
+- Odunowo Samuel Onasanya — SWE/2024/002
+- Etim Favour Itoro — SWE/2023/035
+- Oladipo-Ajibola Erioluwa Isaac — SWE/2023/081
+- Oke Akintomiwa Victor — SWE/2023/049
+- Omisope Daniel Ayomipo — SWE/2023/059
+- Emilolorun Taiwo Timilehin — SWE/2023/034
+- Abraham Precious Eberechi — SWE/2023/002
+- Ogundipe Aduragbemi Israel — SWE/2023/045
+- Ajaja Oluwadarasimi David — SWE/2023/019
+- AKINTUNDE MARY OLUWADAMILOLA — MTH/2023/027
+- ADETAN OreOluwa Jesutofunmi — SWE/2023/011
+- Oladimeji Ayomide Emmanuel — SWE/2023/080
+- Oyedele Abdulsalam Olamide — SWE/2023/065
+- ROBERT-FAJIMI JASON OLUWANIFEMI — SWE/2023/082
+- Ojewande Abdulfatai Ayofe — SWE/2023/048
+- Adisa Abdulrazaaq Oluwatumilara — SWE/2023/015
+- Adesokan Heritage Rereloluwa — SWE/2023/010
