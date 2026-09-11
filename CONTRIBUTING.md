@@ -51,14 +51,14 @@ Then open a pull request on GitHub **into `dev`** (never `main`).
 
 Use Conventional Commits so history reads clearly:
 
-| Prefix | Use for |
-| --- | --- |
-| `feat:` | New functionality |
-| `fix:` | Bug fixes |
-| `docs:` | Documentation only |
-| `style:` | Formatting, no code change |
+| Prefix      | Use for                              |
+| ----------- | ------------------------------------ |
+| `feat:`     | New functionality                    |
+| `fix:`      | Bug fixes                            |
+| `docs:`     | Documentation only                   |
+| `style:`    | Formatting, no code change           |
 | `refactor:` | Code change that adds no feature/fix |
-| `chore:` | Tooling, config, housekeeping |
+| `chore:`    | Tooling, config, housekeeping        |
 
 Examples:
 
@@ -87,13 +87,13 @@ Both should be specific and short. Reference an issue number when one exists, e.
 
 Every member gets their own page and page stylesheet; the shared files are owned by the lead. Follow these rules so we never fight over the same file:
 
-| File | Who edits it |
-| --- | --- |
-| `css/base.css` | Lead only - design tokens, reset, typography. Others only use the tokens (e.g. `var(--color-primary)`). |
-| `css/components.css` | Lead + whoever builds the header/footer. Shared, reusable classes (buttons, cards, forms, nav). Others **use** the classes, never edit the file. |
-| `css/pages/index.css` | Owner of the landing page. |
-| `css/pages/menu.css` | Owner of the menu page. |
-| `css/pages/cart.css` | Owner of the cart page, and so on for every page. |
+| File                  | Who edits it                                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `css/base.css`        | Lead only - design tokens, reset, typography. Others only use the tokens (e.g. `var(--color-primary)`).                                          |
+| `css/components.css`  | Lead + whoever builds the header/footer. Shared, reusable classes (buttons, cards, forms, nav). Others **use** the classes, never edit the file. |
+| `css/pages/index.css` | Owner of the landing page.                                                                                                                       |
+| `css/pages/menu.css`  | Owner of the menu page.                                                                                                                          |
+| `css/pages/cart.css`  | Owner of the cart page, and so on for every page.                                                                                                |
 
 Each page HTML already links, in order: `base.css`, `components.css`, then its own `css/pages/<page>.css`. Put page-specific styling only in your page file - not in the shared files, and not in inline `<style>` tags.
 
@@ -149,3 +149,4 @@ And verify:
 - Ojewande Abdulfatai Ayofe — SWE/2023/048
 - Adisa Abdulrazaaq Oluwatumilara — SWE/2023/015
 - Adesokan Heritage Rereloluwa — SWE/2023/010
+- Fadeyi Oreoluwa Omolola — SWE/2023/036
