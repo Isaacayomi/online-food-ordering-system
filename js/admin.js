@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleAddItem(event) {
     event.preventDefault();
-    const form = event.currentTarget;
+    const form = event.target;
     const get = (id) => form.querySelector(`#${id}`);
     const name = String(get("item-name").value || "").trim();
     const category = get("item-category").value;
