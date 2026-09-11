@@ -552,20 +552,6 @@
   border-color: #ad343e;
 }
 
-.btn-delete.is-disabled {
-  color: #b4b9a6;
-  border-color: #e4e7dc;
-  background: #f5f6f2;
-  cursor: not-allowed;
-}
-
-.btn-delete.is-live {
-  color: var(--accent);
-  border-color: #d9e0cf;
-  background: #f5f7f0;
-  cursor: default;
-}
-
 .menu-admin-status {
   display: flex;
   align-items: center;

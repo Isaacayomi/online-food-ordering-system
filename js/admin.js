@@ -280,9 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function menuCardHTML(item) {
     const deleteControl = item.custom
       ? `<button class="btn-delete" type="button" data-delete-item="${Utils.escapeHTML(item.id)}">Delete</button>`
-      : item.live
-        ? `<button class="btn-delete is-live" type="button" disabled title="Live dish from TheMealDB — read only">Live</button>`
-        : `<button class="btn-delete is-disabled" type="button" disabled title="Built-in menu item — can't be deleted">Built-in</button>`;
+      : "";
     return `
       <article class="menu-admin-card">
         <img class="menu-admin-thumb" src="${Menu.url(item)}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src=Menu.PLACEHOLDER">
