@@ -23,7 +23,7 @@ Run through these before the defence demo and record results in the table. Also 
 ## Menu
 
 - [ ] All local menu items render with image, name, category and price (18 Nigerian dishes)
-- [ ] The 18 local dishes load instantly, then a spinner appears while ~54 TheMealDB dishes load (first visit); repeat visits are instant via the cached pool
+- [ ] The 18 local dishes load instantly, then a spinner appears while ~108 TheMealDB dishes load (first visit); repeat visits are instant via the cached pool
 - [ ] "Load More" reveals 9 more cards at a time — local items first, then custom items, then the live pool — until the list ends
 - [ ] Category chips filter correctly across local, custom and live-pool dishes; "All" restores everything
 - [ ] Search narrows local results instantly; no phony matches (e.g. "jollof" finds local dishes)

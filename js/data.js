@@ -220,7 +220,7 @@ const Menu = (() => {
     { api: "Vegetarian", price: 1600 },
   ];
 
-  const LIVE_LIMIT = 54;
+  const LIVE_LIMIT = 108;
 
   const liveCategory = (api) => {
     const c = api.toLowerCase();
