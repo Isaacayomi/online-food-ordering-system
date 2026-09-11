@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function cardHTML(item) {
+    const adminView =
+      typeof Auth !== "undefined" && Auth.isAdmin();
     return `
       <article class="menu-card" data-category="${item.category}" data-food-id="${item.id}" data-price="${item.price}">
         <div class="menu-card-media">
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="price">${Utils.money(item.price)}</span>
           </div>
           <p>${Utils.escapeHTML(item.description)}</p>
-          <button class="btn-add" type="button">Add to Cart</button>
+          ${adminView ? "" : '<button class="btn-add" type="button">Add to Cart</button>'}
         </div>
       </article>`;
   }
@@ -205,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
   grid.addEventListener("click", (event) => {
     const button = event.target.closest(".btn-add");
     if (!button || typeof Cart === "undefined") return;
+    if (typeof Auth !== "undefined" && Auth.isAdmin()) return;
 
     const signedIn = typeof Auth !== "undefined" && Auth.isSignedIn();
     if (!signedIn) {

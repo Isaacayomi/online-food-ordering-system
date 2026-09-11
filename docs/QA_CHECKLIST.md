@@ -63,6 +63,8 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Updated status flows through to the customer's My Orders page
 - [ ] Admin account works: `admin@campuseats.com` / `admin123`
 - [ ] Orders ↔ Menu switch works and remembers nothing stale (each panel renders fresh)
+- [ ] Signed in as admin: menu page and home featured dishes render without "Add to Cart"; header cart icon is hidden
+- [ ] Signed in as admin: `/pages/checkout` shows an "Admins can't place orders" notice instead of the form
 
 ## Admin menu management
 

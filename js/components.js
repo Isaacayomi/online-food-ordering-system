@@ -6,7 +6,7 @@ const pageLink = (file) => `${isPage ? "" : "pages/"}${file}`;
 const navItems = [
   ["Home", isPage ? "../index.html" : "index.html", "index.html"],
   ["About", pageLink("about.html"), "about.html"],
-  ["Menu", pageLink("menu.html"), "menu.html", "non-admin-action"],
+  ["Menu", pageLink("menu.html"), "menu.html"],
   ["Contact", pageLink("contact.html"), "contact.html"],
   ["My Orders", pageLink("orders.html"), "orders.html", "customer-only-action"],
   ["Admin", pageLink("admin.html"), "admin.html", "admin-only-action"],
@@ -87,6 +87,10 @@ function renderAuthState() {
 
   document.querySelectorAll(".admin-only-action").forEach((element) => {
     element.hidden = !isAdmin;
+  });
+
+  document.querySelectorAll(".non-admin-action").forEach((element) => {
+    element.hidden = isAdmin;
   });
 
   if (signedIn) {
