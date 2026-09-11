@@ -73,7 +73,7 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Adding an item (image URL) shows it in the "Current menu" list and on the menu page under the right category — and it can be added to cart and checked out
 - [ ] Uploading an image (> 300 KB) is rejected; a smaller file shows a preview and saves as a data URL
 - [ ] A bad image URL falls back to the neutral placeholder (never a broken image)
-- [ ] Deleted custom items vanish from the admin list and the menu page; built-in items show a disabled "Built-in" delete control
+- [ ] Deleted custom items vanish from the admin list and the menu page; built-in items show a disabled "Built-in" delete control; deleting a custom item confirms through the app's custom modal (not the browser dialog), and Cancel/backdrop/Escape close without deleting
 - [ ] The "Current menu" list shows live TheMealDB dishes (with a disabled "Live" pill) alongside built-in and custom items — no "N items" count text
 - [ ] "Load more dishes…" on the admin menu list reveals more items and hides when all are shown; a loading note + spinner appear while the live pool is fetched for the first time
 - [ ] The admin menu list refreshes when a custom item is added/removed (including from another tab)

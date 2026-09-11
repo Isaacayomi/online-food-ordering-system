@@ -439,11 +439,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (deleteButton) {
       const id = deleteButton.dataset.deleteItem;
       const item = Menu.all().find((entry) => entry.id === id);
-      if (item && window.confirm(`Delete "${item.name}" from the menu?`)) {
+      if (!item) return;
+      confirmModal({
+        title: "Delete menu item?",
+        message: `Delete "${item.name}" from the menu? This can't be undone.`,
+        confirmLabel: "Delete",
+        danger: true,
+      }).then((ok) => {
+        if (!ok) return;
         Menu.remove(id);
         renderMenuList();
         showToast(`Removed "${item.name}" from the menu.`);
-      }
+      });
       return;
     }
 
