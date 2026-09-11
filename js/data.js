@@ -221,7 +221,8 @@ const Menu = (() => {
   ];
 
   const LIVE_LIMIT = 108;
-  const LIVE_POOL_VERSION = 2;
+  const LIVE_POOL_VERSION = 3;
+  const LIVE_LETTERS = "abcdefghijklmnopqrstuvwxyz".split("");
 
   const liveCategory = (api) => {
     const c = api.toLowerCase();
@@ -252,17 +253,38 @@ const Menu = (() => {
     return copy;
   }
 
-  function normalizeLive(payload, category, price) {
-    return (payload.meals || []).map((meal) => ({
+  function liveIngredients(meal) {
+    const list = [];
+    for (let i = 1; i <= 3; i += 1) {
+      const value = String(meal[`strIngredient${i}`] || "").trim();
+      if (value) list.push(value);
+    }
+    return list;
+  }
+
+  function describeLive(meal) {
+    const area = String(meal.strArea || "").trim();
+    const category = String(meal.strCategory || "").trim();
+    const origin = area ? `${area} ` : "";
+    const kind = category ? category.toLowerCase() : "menu dish";
+    const ingredients = liveIngredients(meal);
+    if (ingredients.length) {
+      return `A ${origin}${kind} made with ${ingredients.join(", ")}.`;
+    }
+    return `A ${origin}${kind} served fresh from TheMealDB today.`;
+  }
+
+  function normalizeRecipe(meal) {
+    const category = liveCategory(meal.strCategory);
+    return {
       id: `live-${meal.idMeal}`,
       name: meal.strMeal,
       category,
-      price,
-      description:
-        "A live international dish pulled straight from TheMealDB today.",
+      price: livePrice(meal.strCategory),
+      description: describeLive(meal),
       image: meal.strMealThumb,
       live: true,
-    }));
+    };
   }
 
   let livePool = [];
@@ -280,31 +302,29 @@ const Menu = (() => {
     }
 
     const results = await Promise.allSettled(
-      LIVE_CATEGORIES.map(({ api }) =>
+      LIVE_LETTERS.map((letter) =>
         fetch(
-          `https://www.themealdb.com/api/json/v1/1/filter.php?c=${encodeURIComponent(api)}`,
+          `https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`,
         ).then((res) => res.json()),
       ),
     );
 
-    const live = [];
-    results.forEach((result, index) => {
+    const seen = new Map();
+    results.forEach((result) => {
       if (
-        result.status === "fulfilled" &&
-        result.value &&
-        Array.isArray(result.value.meals)
+        result.status !== "fulfilled" ||
+        !result.value ||
+        !Array.isArray(result.value.meals)
       ) {
-        live.push(
-          ...normalizeLive(
-            result.value,
-            liveCategory(LIVE_CATEGORIES[index].api),
-            livePrice(LIVE_CATEGORIES[index].api),
-          ),
-        );
+        return;
       }
+      result.value.meals.forEach((meal) => {
+        if (!meal || !meal.strMeal || seen.has(meal.idMeal)) return;
+        seen.set(meal.idMeal, normalizeRecipe(meal));
+      });
     });
 
-    livePool = shuffle(live).slice(0, LIVE_LIMIT);
+    livePool = shuffle([...seen.values()]).slice(0, LIVE_LIMIT);
     Storage.set(CACHE_KEY, {
       savedAt: Date.now(),
       live: livePool,
@@ -351,11 +371,7 @@ const Menu = (() => {
             name: meal.strMeal,
             category,
             price: PRICE_TABLET[category] || 3400,
-            description:
-              `${meal.strInstructions || ""}`
-                .replace(/\s+/g, " ")
-                .trim()
-                .slice(0, 96) + "…",
+            description: describeLive(meal),
             image: meal.strMealThumb,
             live: true,
             searched: true,

@@ -66,7 +66,7 @@ A simple, student-focused web ordering platform solves this by letting users bro
 ### Implemented
 
 - **Local Nigerian menu** — 18 dishes across Starters, Mains, Drinks and Desserts, each with a real food photo, description and price.
-- **Curated local menu + live pool** — the 18 Nigerian dishes load instantly, joined by a cached pool of up to ~108 TheMealDB international dishes (from 14 categories, shuffled, price-mapped) that surfaces progressively as "Load More" is clicked; images and no-result states degrade gracefully (offline-safe placeholder).
+- **Curated local menu + live pool** — the 18 Nigerian dishes load instantly, joined by a cached pool of up to ~108 TheMealDB international dishes (shuffled, price-mapped, each with a short description written from the dish's cuisine, category and main ingredients) that surfaces progressively as "Load More" is clicked; images and no-result states degrade gracefully (offline-safe placeholder).
 - **Menu search & filters** — category chips plus instant search; when local results are empty, search queries TheMealDB and renders up to 6 live results (debounced, with a loading spinner).
 - **Pagination** — "Load More" reveals 9 cards at a time until the list ends (local, custom and live-pool dishes all paginate together).
 - **Authentication** — register, sign in and sign out with client-side validation (WebCrypto salted SHA-256 hashes); a demo account is seeded on first run. Signed-in users are redirected away from the auth pages; the header switches to "Hi, name / Sign out".
