@@ -1,6 +1,6 @@
 const isPage = window.location.pathname.includes("/pages/");
 const rootPath = isPage ? ".." : ".";
-const pageName = window.location.pathname.split("/").pop() || "index.html";
+const pageFile = (window.location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "").toLowerCase();
 const pageLink = (file) => `${isPage ? "" : "pages/"}${file}`;
 
 const navItems = [
@@ -22,8 +22,9 @@ const headerHTML = `
       <nav class="nav-links" aria-label="Primary navigation">
         ${navItems
     .map(([label, href, file, actionClass]) => {
+      const active = file.replace(/\.html$/, "").toLowerCase() === pageFile;
       const cls = [
-        pageName === file ? "is-active" : "",
+        active ? "is-active" : "",
         actionClass || "",
       ]
         .filter(Boolean)
@@ -63,7 +64,7 @@ const footerHTML = `
     <div class="site-shell footer-bottom">Copyright © 2026 CampusEats. All Rights Reserved.</div>
   </footer>`;
 
-const ON_AUTH_PAGE = pageName === "login.html" || pageName === "register.html";
+const ON_AUTH_PAGE = pageFile === "login" || pageFile === "register";
 
 function renderAuthState() {
   const hosts = [...document.querySelectorAll(".auth-state")];
