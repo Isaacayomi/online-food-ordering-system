@@ -53,9 +53,13 @@
   line-height: 24px;
   text-decoration: none;
 }
-.nav-links a:hover,
-.nav-links .is-active {
+.nav-links a:hover {
   background: var(--sage);
+}
+.nav-links a.is-active {
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
 }
 .nav-toggle {
   display: none;
@@ -513,10 +517,13 @@
     color: var(--ink);
     font-size: 22px;
   }
-  .nav-links a:hover,
-  .nav-links .is-active {
+  .nav-links a:hover {
     background: var(--sage);
     color: var(--ink);
+  }
+  .nav-links a.is-active {
+    background: var(--ink);
+    color: #fff;
   }
   .site-footer {
     margin-top: 32px;

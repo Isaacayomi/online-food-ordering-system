@@ -1,6 +1,7 @@
 const Menu = (() => {
   const rootPath = window.location.pathname.includes("/pages/") ? "../" : "";
   const CACHE_KEY = "foodMenu";
+  const CUSTOM_KEY = "ceCustomMenu";
 
   const PLACEHOLDER =
     "data:image/svg+xml," +
@@ -203,10 +204,36 @@ const Menu = (() => {
   };
 
   const LIVE_CATEGORIES = [
-    { api: "Chicken", category: "mains", price: 3400 },
-    { api: "Seafood", category: "mains", price: 4200 },
-    { api: "Dessert", category: "desserts", price: 1500 },
+    { api: "Beef", price: 3400 },
+    { api: "Breakfast", price: 1500 },
+    { api: "Chicken", price: 3400 },
+    { api: "Dessert", price: 1500 },
+    { api: "Goat", price: 4000 },
+    { api: "Lamb", price: 4200 },
+    { api: "Miscellaneous", price: 3400 },
+    { api: "Pasta", price: 3000 },
+    { api: "Pork", price: 4000 },
+    { api: "Seafood", price: 4200 },
+    { api: "Side", price: 1500 },
+    { api: "Starter", price: 1500 },
+    { api: "Vegan", price: 1600 },
+    { api: "Vegetarian", price: 1600 },
   ];
+
+  const LIVE_LIMIT = 108;
+  const LIVE_POOL_VERSION = 2;
+
+  const liveCategory = (api) => {
+    const c = api.toLowerCase();
+    if (c === "dessert") return "desserts";
+    if (c === "side" || c === "starter" || c === "breakfast")
+      return "starters";
+    if (c === "vegan" || c === "vegetarian") return "starters";
+    return "mains";
+  };
+
+  const livePrice = (api) =>
+    LIVE_CATEGORIES.find((entry) => entry.api === api)?.price || 3400;
 
   function guessCategory(category) {
     const c = String(category || "").toLowerCase();
@@ -216,8 +243,17 @@ const Menu = (() => {
     return "mains";
   }
 
+  function shuffle(list) {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
   function normalizeLive(payload, category, price) {
-    return (payload.meals || []).slice(0, 3).map((meal) => ({
+    return (payload.meals || []).map((meal) => ({
       id: `live-${meal.idMeal}`,
       name: meal.strMeal,
       category,
@@ -229,10 +265,19 @@ const Menu = (() => {
     }));
   }
 
+  let livePool = [];
+
   async function loadLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    if (cached && Array.isArray(cached.live) && cached.live.length)
+    if (
+      cached &&
+      cached.v === LIVE_POOL_VERSION &&
+      Array.isArray(cached.live) &&
+      cached.live.length
+    ) {
+      livePool = cached.live;
       return cached.live;
+    }
 
     const results = await Promise.allSettled(
       LIVE_CATEGORIES.map(({ api }) =>
@@ -249,18 +294,36 @@ const Menu = (() => {
         result.value &&
         Array.isArray(result.value.meals)
       ) {
-        const { category, price } = LIVE_CATEGORIES[index];
-        live.push(...normalizeLive(result.value, category, price));
+        live.push(
+          ...normalizeLive(
+            result.value,
+            liveCategory(LIVE_CATEGORIES[index].api),
+            livePrice(LIVE_CATEGORIES[index].api),
+          ),
+        );
       }
     });
 
-    Storage.set(CACHE_KEY, { savedAt: Date.now(), live });
-    return live;
+    livePool = shuffle(live).slice(0, LIVE_LIMIT);
+    Storage.set(CACHE_KEY, {
+      savedAt: Date.now(),
+      live: livePool,
+      v: LIVE_POOL_VERSION,
+    });
+    return livePool;
   }
 
   function getCachedLive() {
     const cached = Storage.get(CACHE_KEY, null);
-    return cached && Array.isArray(cached.live) ? cached.live : [];
+    if (
+      cached &&
+      cached.v === LIVE_POOL_VERSION &&
+      Array.isArray(cached.live)
+    ) {
+      livePool = cached.live;
+      return cached.live;
+    }
+    return [];
   }
 
   async function search(query) {
@@ -306,9 +369,51 @@ const Menu = (() => {
   }
 
   function url(item) {
-    return item.image.startsWith("http")
-      ? item.image
-      : `${rootPath}${item.image}`;
+    const src = item.image || "";
+    return src.startsWith("http") || src.startsWith("data:")
+      ? src
+      : `${rootPath}${src}`;
+  }
+
+  function custom() {
+    const list = Storage.get(CUSTOM_KEY, []);
+    return Array.isArray(list) ? list : [];
+  }
+
+  function all() {
+    return [...CATALOG, ...custom(), ...livePool];
+  }
+
+  function persist(list) {
+    try {
+      localStorage.setItem(CUSTOM_KEY, JSON.stringify(list));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function add(item) {
+    const list = custom();
+    const next = {
+      id: `custom-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+      name: item.name,
+      category: item.category,
+      price: Number(item.price),
+      description: item.description || "",
+      image: item.image || "",
+      custom: true,
+    };
+    if (!persist([...list, next])) return null;
+    window.dispatchEvent(new CustomEvent("menu-changed"));
+    return next;
+  }
+
+  function remove(id) {
+    const list = custom().filter((item) => item.id !== id);
+    if (!persist(list)) return false;
+    window.dispatchEvent(new CustomEvent("menu-changed"));
+    return true;
   }
 
   return {
@@ -319,5 +424,9 @@ const Menu = (() => {
     search,
     url,
     PLACEHOLDER,
+    custom,
+    all,
+    add,
+    remove,
   };
 })();

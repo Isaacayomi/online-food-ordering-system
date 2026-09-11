@@ -7,9 +7,9 @@
 **Branch:** `feat/live-menu-auth` (foundation)
 
 - 18-dish Nigerian catalogue (`js/data.js` `Menu.CATALOG`) with real food photos and prices (never an un-priced dish — `PRICE_TABLET` auto-prices live items).
-- Live TheMealDB feed (Chicken / Seafood / Dessert, 3 each, cached in `foodMenu`) — **retired post-merge**: the menu no longer auto-loads a live feed; on-demand live search (`Menu.search`) covers unknown dishes instead.
-- On-demand live search (`Menu.search`) — unknown queries (e.g. "pizza") return up to 6 tagged live results, cached per query.
-- Category chips, instant search with spinner, "Load More" pagination (9 at a time).
+- Live TheMealDB **pool** — up to ~108 international dishes across 14 categories (`Beef`, `Chicken`, `Pasta`, `Seafood`, `Vegetarian`, …) are shuffled, mapped onto the local categories/prices, and merged into `Menu.all()`; revealed progressively with "Load More" and cached in `foodMenu` for instant repeat visits.
+- On-demand live search (`Menu.search`) — unknown queries (e.g. "pizza") return up to 6 live results, cached per query.
+- Category chips, instant search with spinner, "Load More" pagination (9 at a time, local → custom → live pool).
 - Offline-safe image placeholder (`Menu.PLACEHOLDER`) — a card never shows a broken image.
 - Logo favicon.
 
@@ -90,6 +90,16 @@
 - My Orders and the admin page both render colour-coded status badges (`order-status--<key>` modifiers in `css/pages/orders.css`).
 
 **Files:** `pages/admin.html`, `css/pages/admin.css`, `js/admin.js`, `js/auth.js`, `js/components.js`, `js/orders.js`, `css/pages/orders.css`.
+
+## 9. Admin menu management — ✅ merged
+
+- `js/data.js` exposes a custom-menu layer over `ceCustomMenu`: `Menu.custom()`, `Menu.all()` (built-in catalog + custom items), `Menu.add()`, `Menu.remove()`, and `Menu.url()` now also serves `data:` image URLs; add/remove dispatch a `menu-changed` event.
+- `js/menu.js` renders from `Menu.all()` instead of the raw catalog and re-renders on `menu-changed` / cross-tab `storage`, so admin edits appear live on the menu page.
+- `js/admin.js` gains an Orders/Menu switch: the Menu panel has an add-item form (name, category, price, description, image via URL or a ≤300 KB upload with live preview) that validates via `Utils` conventions and deletes custom items (built-ins are read-only with a disabled control).
+- Orders flow is untouched — custom items go through `Cart` → checkout → `foodOrders` like built-ins.
+- Removed the "Live results for …" badge on live-search cards (cards render without a flag; `card-flag` CSS deleted).
+
+**Files:** `js/data.js`, `js/menu.js`, `js/admin.js`, `css/pages/admin.css`, `css/pages/menu.css`.
 
 ---
 

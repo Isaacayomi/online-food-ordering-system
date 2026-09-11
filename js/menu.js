@@ -9,10 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!grid) return;
 
-  let all = [...Menu.CATALOG];
+  Menu.getCachedLive();
+  let all = Menu.all();
   let shown = PAGE_SIZE;
   let liveResults = null;
   let searchingLive = false;
+  let bootstrappingLive = false;
   let searchedQuery = "";
   let searchSeq = 0;
   let debounceTimer = null;
@@ -43,12 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.setTimeout(() => toastEl.classList.remove("is-visible"), 4000);
   }
 
-  function cardHTML(item, flag) {
+  function cardHTML(item) {
     return `
       <article class="menu-card" data-category="${item.category}" data-food-id="${item.id}" data-price="${item.price}">
         <div class="menu-card-media">
           <img src="${Menu.url(item)}" alt="${Utils.escapeHTML(item.name)}" loading="lazy" onerror="this.onerror=null;this.src=Menu.PLACEHOLDER">
-          ${flag ? `<span class="card-flag">${Utils.escapeHTML(flag)}</span>` : ""}
         </div>
         <div class="menu-card-body">
           <div class="menu-card-top">
@@ -84,11 +85,24 @@ document.addEventListener("DOMContentLoaded", () => {
     status.replaceChildren();
   }
 
+  function showLiveLoading() {
+    status.hidden = false;
+    status.replaceChildren(
+      Object.assign(document.createElement("span"), { className: "spinner", role: "status", "aria-label": "Loading" }),
+      document.createTextNode(" Loading more dishes from TheMealDB…")
+    );
+  }
+
   function render() {
     grid.replaceChildren();
     loadMoreBtn.hidden = true;
 
     const query = searchInput.value.trim().toLowerCase();
+
+    if (bootstrappingLive && !liveResults && !query) {
+      showLiveLoading();
+      return;
+    }
 
     if (searchingLive) {
       status.hidden = false;
@@ -104,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (liveResults) {
       const filter = activeFilter();
       const items = liveResults.filter((item) => filter === "all" || item.category === filter);
-      items.forEach((item) => grid.insertAdjacentHTML("beforeend", cardHTML(item, `Live results for "${searchedQuery}"`)));
+      items.forEach((item) => grid.insertAdjacentHTML("beforeend", cardHTML(item)));
 
       if (!items.length) {
         status.hidden = false;
@@ -179,6 +193,15 @@ document.addEventListener("DOMContentLoaded", () => {
   searchInput?.addEventListener("input", onQueryChange);
   loadMoreBtn?.addEventListener("click", loadMore);
 
+  function refreshCatalog() {
+    all = Menu.all();
+    resetPaging();
+  }
+  window.addEventListener("menu-changed", refreshCatalog);
+  window.addEventListener("storage", (event) => {
+    if (event.key === "ceCustomMenu" || event.key === null) refreshCatalog();
+  });
+
   grid.addEventListener("click", (event) => {
     const button = event.target.closest(".btn-add");
     if (!button || typeof Cart === "undefined") return;
@@ -202,5 +225,27 @@ document.addEventListener("DOMContentLoaded", () => {
     window.setTimeout(() => (button.textContent = "Add to Cart"), 900);
   });
 
+  async function bootstrapLive() {
+    if (Menu.getCachedLive().length) {
+      all = Menu.all();
+      resetPaging();
+      return;
+    }
+    bootstrappingLive = true;
+    render();
+    try {
+      await Menu.loadLive();
+    } catch {
+      bootstrappingLive = false;
+      render();
+      return;
+    }
+    all = Menu.all();
+    bootstrappingLive = false;
+    if (!liveResults && !searchInput.value.trim()) resetPaging();
+    else render();
+  }
+
   render();
+  bootstrapLive();
 });

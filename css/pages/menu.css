@@ -161,20 +161,6 @@
   background: #f0ede4;
 }
 
-.card-flag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  border-radius: 118px;
-  padding: 6px 12px;
-  color: #fff;
-  background: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .menu-card[hidden], .menu-grid .menu-card[hidden] { display: none; }
 
 .menu-card-media img {

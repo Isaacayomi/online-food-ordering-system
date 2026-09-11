@@ -23,14 +23,16 @@ Run through these before the defence demo and record results in the table. Also 
 ## Menu
 
 - [ ] All local menu items render with image, name, category and price (18 Nigerian dishes)
-- [ ] Menu loads ONLY the 18 local Nigerian dishes — no auto-loaded live feed; if images fail, a neutral placeholder shows (never a broken image)
-- [ ] Category chips filter correctly; "All" restores everything
+- [ ] The 18 local dishes load instantly, then a spinner appears while ~108 TheMealDB dishes load (first visit); repeat visits are instant via the cached pool
+- [ ] "Load More" reveals 9 more cards at a time — local items first, then custom items, then the live pool — until the list ends
+- [ ] Category chips filter correctly across local, custom and live-pool dishes; "All" restores everything
 - [ ] Search narrows local results instantly; no phony matches (e.g. "jollof" finds local dishes)
-- [ ] Searching an unknown dish (e.g. "pizza") shows a loading spinner, then up to 6 live results tagged "Live results for …"
-- [ ] "Load More" reveals 9 more cards and hides when the list ends
+- [ ] Searching an unknown dish (e.g. "pizza") shows a loading spinner, then up to 6 live results
+- [ ] A bad image URL in the pool falls back to the neutral placeholder (never a broken image)
 - [ ] **Signed out:** clicking Add to Cart shows a sign-in/register toast and does **not** add anything
 - [ ] **Signed in:** clicking Add to Cart adds the item, flashes "Added ✓", and the header badge increments
 - [ ] Live-search results can be added to cart (signed in)
+- [ ] Admin-added custom items render like built-ins (image, name, category chip, price) and can be filtered/searched/add to cart
 
 ## Cart
 
@@ -60,6 +62,18 @@ Run through these before the defence demo and record results in the table. Also 
 - [ ] Changing an order's status persists after refresh
 - [ ] Updated status flows through to the customer's My Orders page
 - [ ] Admin account works: `admin@campuseats.com` / `admin123`
+- [ ] Orders ↔ Menu switch works and remembers nothing stale (each panel renders fresh)
+
+## Admin menu management
+
+- [ ] Non-admins are redirected to login (same gate as the dashboard)
+- [ ] "Add a menu item" accepts name, category, price, description and an image URL, and validates: empty name, bad category, price ≤ ₦0, and non-URL images are rejected with a toast
+- [ ] Adding an item (image URL) shows it in the "Current menu" list and on the menu page under the right category — and it can be added to cart and checked out
+- [ ] Uploading an image (> 300 KB) is rejected; a smaller file shows a preview and saves as a data URL
+- [ ] A bad image URL falls back to the neutral placeholder (never a broken image)
+- [ ] Deleted custom items vanish from the admin list and the menu page; built-in items show a disabled "Built-in" delete control
+- [ ] Existing carts/orders snapshot their item data and are unaffected by menu edits
+- [ ] Storage-full guard triggers a toast when the browser quota is hit
 
 ## Auth
 
